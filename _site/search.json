@@ -1,0 +1,42 @@
+{
+  "articles": [
+    {
+      "path": "about.html",
+      "title": "About this site",
+      "description": "Some additional details about the website",
+      "author": [],
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-04-08T21:49:34-04:00"
+    },
+    {
+      "path": "blog.html",
+      "title": "Blog",
+      "author": [],
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-04-08T21:49:35-04:00"
+    },
+    {
+      "path": "index.html",
+      "title": "David Fox",
+      "author": [],
+      "contents": "\r\n\r\n          \r\n          \r\n          David Fox\r\n          \r\n          \r\n          Home\r\n          About\r\n          Portfolio\r\n          Blog\r\n          ☰\r\n          \r\n          \r\n      \r\n        \r\n          \r\n            David Fox\r\n          \r\n          \r\n            \r\n              I am geographer with a broad interest in human dimensions of natural resources and geographic data science. I have extensive experience with conservation biology, environmental policy, demography, geographic information systems (GIS), data analysis, and data visualization. I work for the State of Vermont at the Vermont Center for Geographic Information, which provides open GIS data for the State. I have over 15 years of experience with the full ESRI stack, and stay up-to-date with that kit for my professional work. However, I prefer to work with open source tools like QGIS, PostGIS, and the increasing spatial capabilities of R and Python. In my spare time I make furniture and try not to fall off my bike on the back roads of Vermont.\r\n            \r\n            \r\n              I am geographer with a broad interest in human dimensions of natural resources and geographic data science. I have extensive experience with conservation biology, environmental policy, demography, geographic information systems (GIS), data analysis, and data visualization. I work for the State of Vermont at the Vermont Center for Geographic Information, which provides open GIS data for the State. I have over 15 years of experience with the full ESRI stack, and stay up-to-date with that kit for my professional work. However, I prefer to work with open source tools like QGIS, PostGIS, and the increasing spatial capabilities of R and Python. In my spare time I make furniture and try not to fall off my bike on the back roads of Vermont.\r\n            \r\n          \r\n\r\n          \r\n            \r\n              \r\n                  \r\n                    \r\n                      \r\n                  \r\n                \r\n                                \r\n                  \r\n                    \r\n                      \r\n                  \r\n                \r\n                                \r\n                  \r\n                    \r\n                      \r\n                  \r\n                \r\n                              \r\n          \r\n\r\n          \r\n            \r\n              \r\n                                \r\n                  \r\n                    \r\n                \r\n                                \r\n                  \r\n                    \r\n                \r\n                                \r\n                  \r\n                    \r\n                \r\n                              \r\n            \r\n          \r\n        \r\n      \r\n    \r\n\r\n    \r\n    \r\n    ",
+      "last_modified": "2021-04-08T21:49:36-04:00"
+    },
+    {
+      "path": "portfolio.html",
+      "title": "Portfolio",
+      "description": "A portfolio of some of my work.\n",
+      "author": [],
+      "contents": "\r\nAlbemarle Planning Department\r\nAfter graduate school I worked for the Albemarle County Planning department. I did general cartographic work, like this map for the annual report on new trail connectivity.\r\n\r\n\r\n\r\nI was also part of the team revising the master plan for the Pantops Neighborhood, east of Charlottesville. This involved evaluating things like traffic and car accidents.\r\n\r\n\r\n\r\nWhen doing master planning, you gather extensive amounts of public comments - few things hone your appreciation of clear map design than making a map and then having to plunk it down on a table in front of an audience - potentially a hostile one.\r\n\r\n\r\n\r\n\r\n\r\n\r\nI also developed a series of maps tracking residential development - a hot topic in the County, which was growing rapidly.\r\n\r\n\r\n\r\nThis animation was developed for a join presentation with the Board of Supervisors and the School Board. It was paced so that I could give a narrative of the unfolding pattern of development during the presentation.\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-04-08T21:49:37-04:00"
+    },
+    {
+      "path": "postcard.html",
+      "title": "David Fox",
+      "author": [],
+      "contents": "\r\n\r\n          \r\n          \r\n          David Fox\r\n          \r\n          \r\n          Home\r\n          About\r\n          Portfolio\r\n          Blog\r\n          ☰\r\n          \r\n          \r\n      \r\n        \r\n          \r\n            \r\n              \r\n            \r\n              David Fox\r\n            \r\n            \r\n              \r\n                \r\n                    \r\n                      \r\n                        \r\n                    \r\n                  \r\n                                    \r\n                    \r\n                      \r\n                        \r\n                    \r\n                  \r\n                                    \r\n                    \r\n                      \r\n                        \r\n                    \r\n                  \r\n                                  \r\n            \r\n          \r\n        \r\n        \r\n        \r\n          \r\n            \r\n            Bio\r\n            I am geographer with a broad interest in human dimensions of natural resources and geographic data science. I have extensive experience with conservation biology, environmental policy, demography, geographic information systems (GIS), data analysis, and data visualization. I work for the State of Vermont at the Vermont Center for Geographic Information, which provides open GIS data for the State. I have over 15 years of experience with the full ESRI stack, and stay up-to-date with that kit for my professional work. However, I prefer to work with open source tools like QGIS, PostGIS, and the increasing spatial capabilities of R and Python. In my spare time I make furniture and try not to fall off my bike on the back roads of Vermont.\r\n            \r\n          \r\n        \r\n      \r\n    \r\n\r\n    \r\n      \r\n        \r\n          \r\n            \r\n              \r\n            \r\n              David Fox\r\n            \r\n            \r\n              \r\n                \r\n                                    \r\n                    \r\n                      \r\n                  \r\n                                    \r\n                    \r\n                      \r\n                  \r\n                                    \r\n                    \r\n                      \r\n                  \r\n                                  \r\n              \r\n            \r\n            \r\n              \r\n              Bio\r\n              I am geographer with a broad interest in human dimensions of natural resources and geographic data science. I have extensive experience with conservation biology, environmental policy, demography, geographic information systems (GIS), data analysis, and data visualization. I work for the State of Vermont at the Vermont Center for Geographic Information, which provides open GIS data for the State. I have over 15 years of experience with the full ESRI stack, and stay up-to-date with that kit for my professional work. However, I prefer to work with open source tools like QGIS, PostGIS, and the increasing spatial capabilities of R and Python. In my spare time I make furniture and try not to fall off my bike on the back roads of Vermont.\r\n              \r\n            \r\n        \r\n      \r\n    \r\n\r\n    \r\n    \r\n    ",
+      "last_modified": "2021-04-08T21:49:37-04:00"
+    }
+  ],
+  "collections": ["posts/posts.json"]
+}

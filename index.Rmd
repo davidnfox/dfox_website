@@ -1,0 +1,17 @@
+---
+title: "David Fox"
+image: "images/avatar.jpg"
+links:
+  - label: '`r fontawesome::fa("twitter", height = "25px")`'
+    url: "https://twitter.com/ReynardSubtil"
+  - label: '`r fontawesome::fa("github", height = "25px")`'
+    url: "https://github.com"
+  - label: '`r fontawesome::fa("envelope", height = "25px")`'
+    url: "mailto:fox.david.nn@gmail.com"
+output:
+  postcards::jolla
+site: distill::distill_website
+---
+
+
+I am geographer with a broad interest in human dimensions of natural resources and geographic data science. I have extensive experience with conservation biology, environmental policy, demography, geographic information systems (GIS), data analysis, and data visualization. I work for the State of Vermont at the Vermont Center for Geographic Information, which provides open GIS data for the State. I have over 15 years of experience with the full ESRI stack, and stay up-to-date with that kit for my professional work. However, I prefer to work with open source tools like QGIS, PostGIS, and the increasing spatial capabilities of R and Python. In my spare time I make furniture and try not to fall off my bike on the back roads of Vermont.
