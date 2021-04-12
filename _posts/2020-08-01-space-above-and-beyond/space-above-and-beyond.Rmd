@@ -1,0 +1,155 @@
+---
+title: "Space Above and Beyond"
+description: |
+  Tidy Tuesday Astronaut data.
+author:
+  - name: David Fox
+    url: {}
+date: 08-01-2020
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.height = 4)
+
+library(tidytuesdayR)
+library(tidyverse)
+library(hrbrthemes)
+library(skimr)
+library(janitor)
+library(ggdist)
+library(ggbeeswarm)
+library(ggrepel)
+library(gt)
+library(plotly)
+
+theme_set(theme_ft_rc())
+```
+
+#### This week's Tidy Tuesday data is about astronauts.
+
+First I'll load the data and examine it with the eminently useful {skmir}.
+
+```{r get data}
+tuesdata <- tidytuesdayR::tt_load('2020-07-14')
+
+astronauts = tuesdata$astronauts
+
+skim(astronauts)
+
+```
+
+#### Roles in spaceflight
+
+Occupation, which seems to mean mission role, looks like an interesting variable to explore. First order to is to eliminate any capitalization inconsistencies - which seem to plague all data. There is a lot of discussion about the pros and cons of SQL, but one of the advantages of a database structure is the ability to create rules that keep inconsistent data from ever getting into the data stream.
+
+```{r}
+astronauts %>%
+  mutate(occupation = str_to_lower(occupation)) %>%   # always seem to be capitalization issues
+  tabyl(occupation) %>%
+  adorn_pct_formatting() %>% 
+  gt()
+```
+
+I'm not sure what some of these roles are, also a little re-coding is in order to deal with redundant data categories. Some external research indicates that 'msp' probably stands for mission specialist, and 'psp' stands for payload specialist. This [wikipedia page](https://en.wikipedia.org/wiki/Astronaut_ranks_and_positions#Ranks) has more details. I'll recode these and lump all the tourists together -- sorry lone space journalist. One thing to watch out for with *case_when* is to make sure use double quotes, I was using single quotes and it was driving me nuts.
+
+```{r}
+astronauts_clean <- astronauts %>% 
+  select(name, sex, occupation, year_of_mission, hours_mission) %>% 
+  mutate(occupation = str_to_lower(occupation)) %>%
+  mutate(role = case_when(
+    occupation == "msp" ~ "mission specialist",
+    occupation == "psp" ~ "payload specialist",
+    TRUE ~ occupation),
+    role_factor = fct_lump_n(role, 5))
+```
+
+### Gender Balance in space flight roles.
+
+Some of the early pioneers in spaceflight were women. I'm curious about how the current gender roles look.
+
+```{r}
+astronauts_clean %>%
+    tabyl(role_factor, sex) %>%
+  adorn_totals("row") %>% 
+  adorn_percentages("row") %>% 
+  adorn_pct_formatting() %>%
+  adorn_ns() %>%
+  adorn_title("combined", row_name = "Role", col_name = "gender") %>% 
+  gt()
+```
+
+Not great - only 11% of astronauts have been women. Only 1% of mission commanders have been women, and less than 4% have been pilots. How does this look over time?
+
+```{r, layout="l-body-outset"}
+
+set.seed(567)
+
+p1 = astronauts_clean%>% 
+  ggplot(aes(x= year_of_mission, y= sex, color = role_factor,
+             text = paste(year_of_mission, "<br>",name,"<br>",role_factor))) +
+  geom_quasirandom(alpha = .4,
+                   size = 2,
+                   groupOnX = FALSE) +
+  labs(title = 'Gender roles in space flight',
+       y = NULL, 
+       x = NULL,
+       color = "Role",
+       caption = 'TidyTuesday 2020-07-14') +
+  scale_color_viridis_d(option ="plasma") +
+  theme(legend.position = "bottom")
+
+ggplotly(p1, tooltip = "text")
+
+```
+
+[Valentina Tereshkova](https://en.wikipedia.org/wiki/Valentina_Tereshkova) was the first woman to travel to space - she did a solo flight in 1963 that lasted for 3 days. If you read her wikipedia page, she is clearly a bad ass. There was not another woman pilot in space until 1997 - [Eileen Collins](https://en.wikipedia.org/wiki/Eileen_Collins). It seems like the role of pilot has disappeared since the Space Shuttle was retired, but there are still male mission commanders, while the last woman commander was in 2007.
+
+### Waxing and waning of space flight.
+
+The previous chart shows a several strong pulses in the number of missions.
+
+```{r, layout="l-body-outset"}
+missions  = astronauts %>% 
+  distinct(mission_title, .keep_all = TRUE) %>% 
+  select(year_of_mission, mission_title, ascend_shuttle, in_orbit, hours_mission)
+
+p2 = missions %>% group_by(year_of_mission) %>% 
+  summarize(mission_count = n()) %>% 
+  ggplot(aes(x= year_of_mission,
+             y = mission_count,
+             color = mission_count,
+             size = mission_count,
+             text = paste(year_of_mission, ":", mission_count))) +
+    geom_point(alpha = .5) + 
+    scale_color_viridis_c(option = "plasma") +
+  labs(title = str_wrap("After a heyday in the 90s the number of flights has declined to the level of the 1960's."),
+       x= NULL,
+       y = 'missions') +
+  theme(legend.position = "none")
+
+ggplotly(p2, tooltip = "text")
+```
+
+### Mission hours have increased dramatically with space stations.
+
+```{r fig.height=5, layout="l-body-outset"}
+p3 = ggplot(missions, aes(x= year_of_mission,
+                          y = hours_mission,
+                          size = hours_mission,
+                          color = hours_mission,
+                          text = paste(in_orbit, "<br>", hours_mission))) +
+  geom_jitter(alpha = .5) +
+  #geom_smooth(se = FALSE) +
+  scale_color_viridis_c(option = "plasma") +
+  labs(title = "Although number of missions has declined, \ntime is space has increased dramitically.",
+       x= "",
+       y = "mission hours") + 
+  theme(legend.position = 'none') +
+  scale_y_sqrt()
+
+
+ggplotly(p3, tooltip = "text")
+```
