@@ -1,0 +1,52 @@
+---
+title: "Vermont Post Offices"
+description: |
+  Tidy Tuesday post offices.
+author:
+  - name: David Fox
+    url: {}
+date: 04-14-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidytuesdayR)
+library(tidyverse)
+library(sf)
+library(mapdeck)
+```
+
+Get the data - I'll filter down to Vermont.
+```{r data}
+post_offices <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-13/post_offices.csv')
+
+vt_post_offices <- post_offices %>% 
+  filter(state == "VT")
+```
+
+Lets look at when post offices were established
+```{r}
+vt_post_offices %>%
+  group_by(established) %>%
+  tally() %>% 
+  ggplot(aes(x= established, y = n)) +
+  geom_point() +
+  geom_smooth(span = .1, se = FALSE)
+```
+And the same, but for discontinued.
+```{r}
+vt_post_offices %>%
+  drop_na(discontinued) %>% 
+  group_by(discontinued) %>%
+  tally() %>% 
+  ggplot(aes(x= discontinued, y = n)) +
+  geom_point() +
+  geom_smooth(span = .1, se = FALSE, color="orange")
+```
+
+
+
