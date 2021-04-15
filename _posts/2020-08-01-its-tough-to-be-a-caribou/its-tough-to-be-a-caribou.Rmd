@@ -1,0 +1,141 @@
+---
+title: "Its tough to be a caribou."
+description: |
+  Tidy Tuesday caribou tracking data.
+author:
+  - name: David Fox
+    url: {}
+date: 08-01-2020
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse) 
+library(janitor) 
+library(vroom) 
+library(hrbrthemes) 
+library(gt) 
+library(here)
+library(plotly)
+library(sf)
+library(lubridate)
+library(mapview)
+library(widgetframe)
+library(tmap)
+
+theme_set(theme_ipsum())
+```
+
+This week's data is about caribou in British Columbia, Canada.
+
+Data: (<https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-06-23/readme.md>)
+
+```{r get data}
+tuesdata <- tidytuesdayR::tt_load('2020-06-23')
+
+#locations <- tuesdata$locations
+individuals <-  tuesdata$individuals
+```
+
+There are 2 data sets, one on individuals and one on locations. What data is there about the individuals?
+
+{[skimr](https://github.com/ropensci/skimr)} is a great package for data overview. As a pro tip, you can use use {skimr} and git diffs to quickly see what has changed with a data set.
+
+```{r skim}
+
+skimr::skim(individuals)
+```
+
+Looks like a lot of missing data. What's the sex ratio of collared individuals?
+
+```{r}
+individuals %>%
+  tabyl(sex) %>%
+  adorn_pct_formatting() %>% gt()
+```
+
+They only collared 4 males -- that is a very skewed sex ratio. Are male caribou tremendously hard to capture for radio collaring?
+
+What are the deploy off types (one of the few complete variables)?
+
+```{r}
+individuals %>%
+  tabyl(deploy_off_type) %>%
+  adorn_pct_formatting() %>%
+  gt()
+```
+
+So about 1/5 died, 1/3 have been removed, over 1/3 are unknown, and a bunch are 'other'. That is a lot of radio collars, which are not cheap, with an unknown status. Is there anything useful in the 'deploy_off_comments'?
+
+```{r}
+individuals %>%
+  tabyl(deploy_off_comments) %>%
+  adorn_pct_formatting() %>%
+  gt()
+```
+
+Not really - more missing data- and what the heck does "Infometrics" mean.. do these researchers have a graduate adviser?[^1]
+
+[^1]: I'm being snarky, but I spent 5 years collecting biological field data. One of the big challenges is taking the time to document your research and be a good data steward. There may be mitigating factors I'm not aware of with this data set, but if I was managing this project as a researcher or a grantor I might not be very happy with the quality of this data collection.
+
+Being somewhat morbid, I'm curious about how these caribou died.
+
+```{r}
+individuals %>%
+  filter(deploy_off_type == 'dead') %>%
+  mutate(death_cause = str_to_lower(death_cause)) %>%
+  tabyl(death_cause) %>%
+  adorn_pct_formatting() %>%
+  gt()
+```
+
+Let's do a bit of recoding on these comments.
+
+```{r}
+deceased <- individuals %>%
+  mutate(death_cause = str_to_lower(death_cause)) %>% 
+           filter(deploy_off_type == 'dead') %>% 
+  mutate(cause_of_death = case_when(
+    death_cause == 'accidental, collar still in field, inaccessible' ~ "accident",
+    death_cause == 'accidental.  caught in tree well'                 ~ "accident",
+    death_cause == 'predation - grizzly'                             ~ "predation - grizzly bear",
+    death_cause == 'collar still in field'                           ~ "unknown",
+    death_cause == 'unknown.  collar inaccessible and still in field.'~ "unknown",
+    death_cause == 'unknown.  found 50m from trend open pit mine.  area littered with rock from blasts from the mine.' ~ "explosion",
+    death_cause == 'unknown.  suspected predation' ~ "suspected predation",
+    death_cause == 'unknown.  suspected wolf (or possibly wolverine) predation' ~ "suspected predation",
+    death_cause == 'unknown.  suspected wolf predation' ~ "suspected predation",
+    is.na((death_cause)) ~ 'unknown',
+    TRUE ~ death_cause
+))
+
+deceased %>%
+  tabyl(cause_of_death) %>%
+  adorn_pct_formatting() %>%
+  gt()
+```
+
+So these researchers need some QC on their data collection, but they're busy scientists so we'll forgive them. It looks like wolf predation is an issue for caribou -but also grizzly bears. One poor caribou was hit by a train, another by a car, and it seems like a researcher is suggesting -possibly- one got killed by debris from a blast at a mine! Being a caribou sounds rough.
+
+Let's look at the locations of where these caribou met their fates. While ggplot spatial functions are evolving rapidly, The {[sf](https://r-spatial.github.io/sf/index.html)} package has become the default package for working with spatial data and plays nicely with tidyverse principals and tools. Just a note on coordinate precision. Each decimal place is about a factor of 10. These locations are accurate to within about 10 meters. For more on this -- XCD of course has the definitive [summary](https://xkcd.com/2170/)
+
+```{r}
+deceased_sf <- deceased %>%
+  filter(!is.na(deploy_off_longitude)) %>%
+  st_as_sf(., coords = c("deploy_off_longitude", "deploy_off_latitude"), crs = 4326)
+```
+
+{[Mapview](https://github.com/r-spatial/mapview)} is an excellent package for interactive mapping in R that goes a bit beyond ggplot. Other good mapping packages worth checking out are {[tmap](https://github.com/mtennekes/tmap)} and {[mapdeck](https://github.com/SymbolixAU/mapdeck)}.
+
+```{r echo=TRUE, fig.height=8, fig.width=8}
+map1 <- mapview(deceased_sf,
+        layer.name = "Caribou causes of death",
+        zcol = "cause_of_death",
+        col.regions  = viridisLite:: plasma)
+
+map1
+```
