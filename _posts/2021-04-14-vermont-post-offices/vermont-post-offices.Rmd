@@ -11,16 +11,17 @@ output:
     self_contained: false
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidytuesdayR)
 library(tidyverse)
 library(sf)
 library(mapdeck)
+library(plotly)
 ```
 
 Get the data - I'll filter down to Vermont.
+
 ```{r data}
 post_offices <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-13/post_offices.csv')
 
@@ -28,7 +29,8 @@ vt_post_offices <- post_offices %>%
   filter(state == "VT")
 ```
 
-Lets look at when post offices were established
+Lets look at when post offices were established.
+
 ```{r}
 vt_post_offices %>%
   group_by(established) %>%
@@ -37,7 +39,9 @@ vt_post_offices %>%
   geom_point() +
   geom_smooth(span = .1, se = FALSE)
 ```
+
 And the same, but for discontinued.
+
 ```{r}
 vt_post_offices %>%
   drop_na(discontinued) %>% 
@@ -48,5 +52,29 @@ vt_post_offices %>%
   geom_smooth(span = .1, se = FALSE, color="orange")
 ```
 
+It would be nice to show this as the total number of post offices. At first I was think about how to build an interval for each post office, but how about just calculating the cumulative sum and then subtracting the yearly discontinued count?
 
+```{r}
+established <-  vt_post_offices %>%
+  group_by(established) %>%
+  tally(name = "estab") %>%
+  mutate(cumulative = cumsum(estab)) %>% 
+  rename(year = established)
 
+discontinued <- vt_post_offices %>%
+  drop_na(discontinued) %>% 
+  group_by(discontinued) %>%
+  rename(year = discontinued) %>% 
+  tally(name = "discon")
+
+running <- established %>% 
+  left_join(discontinued, by = "year") %>% 
+    mutate(discon = replace_na(discon, 0),
+           extant = cumulative - discon)
+
+ggplotly(
+ggplot(running, aes(x=year, y= extant)) +
+  geom_line(color = "dodgerblue", size = 1)+
+  scale_y_log10()
+)
+```
