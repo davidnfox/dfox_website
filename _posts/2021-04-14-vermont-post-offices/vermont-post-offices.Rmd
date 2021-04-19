@@ -18,6 +18,12 @@ library(tidyverse)
 library(sf)
 library(mapdeck)
 library(plotly)
+library(hrbrthemes)
+library(ggridges)
+library(ggstream)
+
+theme_set(theme_ft_rc())
+
 ```
 
 Get the data - I'll filter down to Vermont.
@@ -29,52 +35,115 @@ vt_post_offices <- post_offices %>%
   filter(state == "VT")
 ```
 
-Lets look at when post offices were established.
+Lets look at when Vermont post offices were established.  There a couple of different ways to slice this - histograms are nice, since it is easy to roll up to decades for example. Looks like the 1830's was big for post offices. There was another bump post Civil War and things slowed down after that.
+
+```{r}
+vt_post_offices %>%
+  ggplot(aes(x= established)) +
+    geom_histogram(binwidth = 10, color = "grey90")
+```
 
 ```{r}
 vt_post_offices %>%
   group_by(established) %>%
   tally() %>% 
   ggplot(aes(x= established, y = n)) +
-  geom_point() +
-  geom_smooth(span = .1, se = FALSE)
+  geom_point(alpha = .5) +
+  geom_smooth(span = .5, se = FALSE)
 ```
 
-And the same, but for discontinued.
+And the same, but for discontinued. Looks like some major changes in the post office system occurred in the first decade of the 1900's. Cars probably changed a lot for the postal service, but this seems a bit early for that effect.
 
 ```{r}
+vt_post_offices %>%
+  ggplot(aes(x= discontinued)) +
+    geom_histogram(binwidth = 10, color = "grey90")
+
 vt_post_offices %>%
   drop_na(discontinued) %>% 
   group_by(discontinued) %>%
   tally() %>% 
   ggplot(aes(x= discontinued, y = n)) +
   geom_point() +
-  geom_smooth(span = .1, se = FALSE, color="orange")
+  geom_smooth(se = FALSE, color="orange")
 ```
 
-It would be nice to show this as the total number of post offices. At first I was think about how to build an interval for each post office, but how about just calculating the cumulative sum and then subtracting the yearly discontinued count?
+It would be nice to show this as the total number of post offices. I was thinking about doing a cumulative sum and then subtracting a cumulative sum of discounted post offices. However this doesn't give the history of each individual post office, which is what we need if we want a time series map. When I'm doing a Tidy Tuesday project I try to avoid watching David Robinson's video first, so I don't just copy his approach.  In this case I was a bit stumped on how to pivot having all the years a post office was extant. Of course - David had what I needed. What he does is create a new column that is a nested list of the sequence of years between when the post office was established and discontinued, then unnests the list. This will give us one row for each year a post office was open. One thing to watch is that the data has NA for post offices that are still around, so we need to change that to a real value. Looking at the data, it should be valid up to 2000.  
+```{r}
+vt_po_long <- vt_post_offices %>% 
+  select(name, county1, established, discontinued,latitude,longitude) %>% 
+  mutate(discontinued = replace_na(discontinued, 2000)) %>% 
+  mutate(year = map2(established, discontinued, seq)) %>% 
+  unnest(year)
+
+head(vt_po_long)
+```
 
 ```{r}
-established <-  vt_post_offices %>%
-  group_by(established) %>%
-  tally(name = "estab") %>%
-  mutate(cumulative = cumsum(estab)) %>% 
-  rename(year = established)
-
-discontinued <- vt_post_offices %>%
-  drop_na(discontinued) %>% 
-  group_by(discontinued) %>%
-  rename(year = discontinued) %>% 
-  tally(name = "discon")
-
-running <- established %>% 
-  left_join(discontinued, by = "year") %>% 
-    mutate(discon = replace_na(discon, 0),
-           extant = cumulative - discon)
-
-ggplotly(
-ggplot(running, aes(x=year, y= extant)) +
-  geom_line(color = "dodgerblue", size = 1)+
-  scale_y_log10()
-)
+vt_po_long %>%
+  count(year, name ="total_PO") %>% 
+  ggplot(aes(year, total_PO)) +
+  geom_area(fill = 'grey50')
 ```
+So at the turn of the last century, Vermont had 582 post offices - quite a few considering there were only about 344,000 people in the whole state.
+
+```{r}
+vt_po_long %>%
+  count(year, name ="total_PO") %>%
+  arrange(desc(total_PO)) %>% 
+  slice_head(n=1)
+
+```
+There are 3 post offices that have been open since 1784, one from that year was closed for a time, and there are others that have been in continuous operation since the 1790's.
+```{r}
+vt_post_offices %>% 
+  filter(is.na(discontinued)) %>% 
+  select(name, county1, established, continuous) %>% 
+  arrange(established) %>% 
+  slice_head(n=10)
+```
+### Most recent.  
+
+The most recent extant post office was established in 1961 and the top ten goes back to 1913 - so not much development of the system in the last 100 years.
+```{r}
+vt_post_offices %>% 
+  filter(is.na(discontinued)) %>% 
+  select(name, county1, established, continuous) %>% 
+  arrange(desc(established)) %>% 
+  slice_head(n=10)
+```
+
+
+Let's look at this as County trends.
+```{r}
+vt_po_long %>% group_by(county1) %>% 
+  count(year, name ="total_PO") %>% 
+  ggplot(aes(year, total_PO, color =county1)) +
+  geom_area() +
+  facet_wrap(~county1) +
+  theme(legend.position = "Null")
+```
+
+Anymore when I do a facet wrap, I tend to go back to the {ggridges} package.
+```{r}
+vt_po_long %>% group_by(county1) %>% 
+  count(year, name ="total_PO") %>%
+  ggplot(aes(x= year, y = as.factor(county1), group = county1)) +
+  geom_density_ridges(aes(height = total_PO), stat = "identity")
+```
+```{r}
+vt_po_long %>% group_by(county1) %>% 
+  count(year, name ="total_PO") %>%
+  ggplot(aes(x= year, y= total_PO, fill = county1)) +
+  geom_stream()
+  
+```
+
+### Left Standing
+```{r}
+vt_post_offices %>% 
+  filter(is.na(discontinued)) %>% 
+  ggplot(aes(established)) +
+  geom_histogram(binwidth =10, color = "grey90")
+```
+
