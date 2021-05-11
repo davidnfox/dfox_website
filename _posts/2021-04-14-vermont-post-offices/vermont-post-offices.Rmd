@@ -16,40 +16,32 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidytuesdayR)
 library(tidyverse)
 library(sf)
-library(mapdeck)
-library(plotly)
 library(hrbrthemes)
 library(ggridges)
-library(ggstream)
+library(paletteer)
 
-theme_set(theme_ft_rc())
+theme_set(theme_ipsum_rc() + theme(plot.title = element_text(size=12)))
 
 ```
 
 Get the data - I'll filter down to Vermont.
 
-```{r data}
+```{r data, cache = TRUE}
 post_offices <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-13/post_offices.csv')
 
 vt_post_offices <- post_offices %>% 
   filter(state == "VT")
 ```
 
-Lets look at when Vermont post offices were established.  There a couple of different ways to slice this - histograms are nice, since it is easy to roll up to decades for example. Looks like the 1830's was big for post offices. There was another bump post Civil War and things slowed down after that.
+Let's look at when Vermont post offices were established.  There a couple of different ways to slice this - histograms are nice, since it is easy to roll up to decades for example. Looks like the 1830's was big for post offices. There was another bump post Civil War and things slowed down after that.
 
 ```{r}
 vt_post_offices %>%
   ggplot(aes(x= established)) +
-    geom_histogram(binwidth = 10, color = "grey90")
-```
-
-```{r}
-vt_post_offices %>%
-  group_by(established) %>%
-  tally() %>% 
-  ggplot(aes(x= established, y = n)) +
-  geom_point(alpha = .5) +
-  geom_smooth(span = .5, se = FALSE)
+    geom_histogram(binwidth = 10, color = "grey90", fill = "#3B9AB2FF") +
+  labs(title = "Number of Vermont post offices established per decade.",
+       x = NULL,
+       y = NULL)
 ```
 
 And the same, but for discontinued. Looks like some major changes in the post office system occurred in the first decade of the 1900's. Cars probably changed a lot for the postal service, but this seems a bit early for that effect.
