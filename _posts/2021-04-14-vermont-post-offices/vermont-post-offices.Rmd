@@ -19,7 +19,7 @@ library(sf)
 library(hrbrthemes)
 library(ggridges)
 library(paletteer)
-library(ggeasy)
+library(USAboundaries)
 
 theme_set(theme_ipsum_rc() + theme(plot.title = element_text(size=12)))
 
@@ -133,5 +133,29 @@ vt_post_offices %>%
   labs(title = "Year in which still open post offices were established",
        x = NULL, 
        y = NULL)
+```
+##Spatial
+Since we have lat/long coordinates, its trivially easy to make map out this data. I originally had ambitions to make an animated map, but the result turned out to be less than compelling, so here I'll just map the heyday of post offices in 1900 and what was left as of 2000.  We'll pull County boundaries for context with the {USAboundaries} package.
+```{r spatial}
+# Convert the latitude and longitude columns into a geographic feature
+
+po_spatial <- vt_po_long %>% 
+  drop_na() %>%   #no na's allowed in converting to sf
+  filter(year %in% c(1900,2000)) %>% 
+  mutate(year = as_factor(year)) %>% 
+  st_as_sf(coords = c("longitude", "latitude"), crs=4326)
+
+# get Vermont's county bounds  
+vt_counties <- us_counties(states = "Vermont")
+```
+ 
+```{r}
+ggplot(data=vt_counties) +
+  geom_sf() +
+  geom_sf(data = po_spatial, aes(color = established), alpha = .5) +
+  theme_void() +
+  scale_color_viridis_c(option = 'F') +
+  facet_wrap(~year) +
+  labs(title = "100 years of post office closures")
 ```
 
