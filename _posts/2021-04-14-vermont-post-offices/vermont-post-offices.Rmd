@@ -20,6 +20,7 @@ library(hrbrthemes)
 library(ggridges)
 library(paletteer)
 library(USAboundaries)
+library(ggthemes)
 
 theme_set(theme_ipsum_rc() + theme(plot.title = element_text(size=12)))
 
@@ -28,13 +29,14 @@ theme_set(theme_ipsum_rc() + theme(plot.title = element_text(size=12)))
 Get the data - I'll filter down to Vermont.
 
 ```{r data, cache = TRUE}
-post_offices <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-13/post_offices.csv')
+post_offices <- readr::read_csv(
+  'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-13/post_offices.csv')
 
 vt_post_offices <- post_offices %>% 
   filter(state == "VT")
 ```
 
-Let's look at when Vermont post offices were established.  There a couple of different ways to slice this - histograms are nice, since it is easy to roll up to decades for example. Looks like the 1830's was big for post offices. There was another bump post Civil War and things slowed down after that.
+Let's look at when Vermont post offices were established. There a couple of different ways to slice this - histograms are nice, since it is easy to roll up to decades for example. Looks like the 1830's was big for post offices. There was another bump post Civil War and things slowed down after that.
 
 ```{r remedy01}
 vt_post_offices %>%
@@ -55,7 +57,9 @@ vt_post_offices %>%
        x = NULL,
        y = NULL)
 ```
-It would be nice to show this as the total number of post offices. I was thinking about doing a cumulative sum and then subtracting a cumulative sum of discounted post offices. However this doesn't give the history of each individual post office, which is what we need if we want a time series map. When I'm doing a Tidy Tuesday project I try to avoid watching David Robinson's video first, so I don't just copy his approach.  In this case, I was a bit stumped on how to pivot having all the years a post office was extant. Of course - David showcased what I needed to do. What he does is create a new column that is a nested list of the sequence of years between when the post office was established and discontinued, then unnests the list. This will give us one row for each year a post office was open. One thing to watch is that the data has NA for post offices that are still around, so we need to change that to a real value. Looking at the data, it should be valid up to 2000.  
+
+It would be nice to show this as the total number of post offices. I was thinking about doing a cumulative sum and then subtracting a cumulative sum of discounted post offices. However this doesn't give the history of each individual post office, which is what we need if we want a time series map. When I'm doing a Tidy Tuesday project I try to avoid watching David Robinson's video first, so I don't just copy his approach. In this case, I was a bit stumped on how to pivot having all the years a post office was extant. Of course - David showcased what I needed to do. What he does is create a new column that is a nested list of the sequence of years between when the post office was established and discontinued, then unnests the list. This will give us one row for each year a post office was open. One thing to watch is that the data has NA for post offices that are still around, so we need to change that to a real value. Looking at the data, it should be valid up to 2000.
+
 ```{r longer, cache = TRUE}
 vt_po_long <- vt_post_offices %>% 
   select(name, county1, established, discontinued,latitude,longitude) %>% 
@@ -65,7 +69,9 @@ vt_po_long <- vt_post_offices %>%
 
 head(vt_po_long)
 ```
-##Peak Post Office
+
+### Peak Post Office
+
 ```{r rise and fall}
 vt_po_long %>%
   count(year, name ="total_PO") %>% 
@@ -75,6 +81,7 @@ vt_po_long %>%
        x = NULL, 
        y = "total open post offices")
 ```
+
 So at the turn of the last century, Vermont had 582 post offices - quite a few considering there were only about 344,000 people in the whole state.
 
 ```{r peak}
@@ -85,8 +92,11 @@ vt_po_long %>%
   knitr::kable()
 
 ```
-###Old Infrastrucure  
+
+### Old Infrastructure
+
 There are 3 post offices that have been open since 1784, one from that year was closed for a time, and there are others that have been in continuous operation since the 1790's.
+
 ```{r remedy03}
 vt_post_offices %>% 
   filter(is.na(discontinued)) %>% 
@@ -95,9 +105,11 @@ vt_post_offices %>%
   slice_head(n=10) %>% 
   knitr::kable()
 ```
-### Most recent.  
+
+### Most recent.
 
 The most recent extant post office was established in 1961 and the top ten goes back to 1913 - so not much development of the system in the last 100 years.
+
 ```{r remedy04}
 vt_post_offices %>% 
   filter(is.na(discontinued)) %>% 
@@ -106,8 +118,11 @@ vt_post_offices %>%
   slice_head(n=10) %>% 
   knitr::kable()
 ```
-## County Trends  
+
+### County Trends
+
 Let's look at this as County trends.
+
 ```{r counties, fig.height= 8}
 vt_po_long %>% group_by(county1) %>% 
   count(year, name ="total_PO") %>% 
@@ -120,11 +135,13 @@ vt_po_long %>% group_by(county1) %>%
 
 
 ```
+
 If you are familiar with Vermont geography, these trends closely match County sizes. While correlated with population, there are some outliers. Chittenden County is the most populous county, but in 2000 at least looks to have fewer post offices left than Rutland or Windsor.
 
+### Left Standing
 
-### Left Standing  
 Let's look at when post offices that were still open in 2000 were first established. Looks like the majority of the post offices still operating in 2000 were established between 1800 and 1850. This was the originall hey day of Vermont - after the Civil War, many people moved west. Interestingly there have been almost no new post offices established, despite Vermonts modestly growing population - which ticked up in the 1970s in particular.
+
 ```{r remedy06}
 vt_post_offices %>% 
   filter(is.na(discontinued)) %>% 
@@ -134,8 +151,11 @@ vt_post_offices %>%
        x = NULL, 
        y = NULL)
 ```
-##Spatial
-Since we have lat/long coordinates, its trivially easy to make map out this data. I originally had ambitions to make an animated map, but the result turned out to be less than compelling, so here I'll just map the heyday of post offices in 1900 and what was left as of 2000.  We'll pull County boundaries for context with the {USAboundaries} package.
+
+### Spatial
+
+Since we have lat/long coordinates, its trivially easy to make map out this data. I originally had ambitions to make an animated map, but the result turned out to be less than compelling, so here I'll just map the heyday of post offices in 1900 and what was left as of 2000. We'll pull County boundaries for context with the {[USAboundaries](https://docs.ropensci.org/USAboundaries/)} package.
+
 ```{r spatial}
 # Convert the latitude and longitude columns into a geographic feature
 
@@ -148,14 +168,22 @@ po_spatial <- vt_po_long %>%
 # get Vermont's county bounds  
 vt_counties <- us_counties(states = "Vermont")
 ```
- 
-```{r}
+
+```{r, fig.height= 8}
 ggplot(data=vt_counties) +
   geom_sf() +
-  geom_sf(data = po_spatial, aes(color = established), alpha = .5) +
-  theme_void() +
-  scale_color_viridis_c(option = 'F') +
+  geom_sf(data = po_spatial, aes(color = established), alpha = .6) +
+  theme_map() +
+  theme(legend.position = "bottom") +
+  scale_color_viridis_c(option = 'A',
+                        name = "year established",
+                        guide = guide_colorbar(
+                          direction = 'horizontal',
+                          barheight = unit(2, units = 'mm'),
+                          barwidth =  unit(30, units = 'mm'),
+                          title.position = 'top',
+                          nrow = 1
+                        )) +
   facet_wrap(~year) +
   labs(title = "100 years of post office closures")
 ```
-
