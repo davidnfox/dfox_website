@@ -35,7 +35,7 @@ vt_post_offices <- post_offices %>%
 
 Let's look at when Vermont post offices were established.  There a couple of different ways to slice this - histograms are nice, since it is easy to roll up to decades for example. Looks like the 1830's was big for post offices. There was another bump post Civil War and things slowed down after that.
 
-```{r}
+```{r remedy01}
 vt_post_offices %>%
   ggplot(aes(x= established)) +
     geom_histogram(binwidth = 10, color = "grey90", fill = "#3B9AB2FF") +
@@ -46,7 +46,7 @@ vt_post_offices %>%
 
 And the same, but for discontinued. Looks like some major changes in the post office system occurred in the first decade of the 1900's. Cars probably changed a lot for the postal service, but this seems a bit early for that effect. It is interesting that the 1890's were a the last bumper year for new post offices, but then in 1900 a bunch were closed.
 
-```{r}
+```{r remedy02}
 vt_post_offices %>%
   ggplot(aes(x= discontinued)) +
   geom_histogram(binwidth = 10, color = "grey90", fill = "#E1AF00FF") +
@@ -55,7 +55,7 @@ vt_post_offices %>%
        y = NULL)
 ```
 It would be nice to show this as the total number of post offices. I was thinking about doing a cumulative sum and then subtracting a cumulative sum of discounted post offices. However this doesn't give the history of each individual post office, which is what we need if we want a time series map. When I'm doing a Tidy Tuesday project I try to avoid watching David Robinson's video first, so I don't just copy his approach.  In this case, I was a bit stumped on how to pivot having all the years a post office was extant. Of course - David showcased what I needed to do. What he does is create a new column that is a nested list of the sequence of years between when the post office was established and discontinued, then unnests the list. This will give us one row for each year a post office was open. One thing to watch is that the data has NA for post offices that are still around, so we need to change that to a real value. Looking at the data, it should be valid up to 2000.  
-```{r}
+```{r longer, cache = TRUE}
 vt_po_long <- vt_post_offices %>% 
   select(name, county1, established, discontinued,latitude,longitude) %>% 
   mutate(discontinued = replace_na(discontinued, 2000)) %>% 
@@ -64,69 +64,70 @@ vt_po_long <- vt_post_offices %>%
 
 head(vt_po_long)
 ```
-
-```{r}
+##Peak Post Office
+```{r rise and fall}
 vt_po_long %>%
   count(year, name ="total_PO") %>% 
   ggplot(aes(year, total_PO)) +
-  geom_area(fill = 'grey50')
+  geom_area(fill = '#78B7C5FF') +
+  labs(title = "Rise and fall of Vermont post offices",
+       x = NULL, 
+       y = "total open post offices")
 ```
 So at the turn of the last century, Vermont had 582 post offices - quite a few considering there were only about 344,000 people in the whole state.
 
-```{r}
+```{r peak}
 vt_po_long %>%
   count(year, name ="total_PO") %>%
   arrange(desc(total_PO)) %>% 
-  slice_head(n=1)
+  slice_head %>% 
+  knitr::kable()
 
 ```
+###Old Infrastrucure  
 There are 3 post offices that have been open since 1784, one from that year was closed for a time, and there are others that have been in continuous operation since the 1790's.
-```{r}
+```{r remedy03}
 vt_post_offices %>% 
   filter(is.na(discontinued)) %>% 
   select(name, county1, established, continuous) %>% 
   arrange(established) %>% 
-  slice_head(n=10)
+  slice_head(n=10) %>% 
+  knitr::kable()
 ```
 ### Most recent.  
 
 The most recent extant post office was established in 1961 and the top ten goes back to 1913 - so not much development of the system in the last 100 years.
-```{r}
+```{r remedy04}
 vt_post_offices %>% 
   filter(is.na(discontinued)) %>% 
   select(name, county1, established, continuous) %>% 
   arrange(desc(established)) %>% 
-  slice_head(n=10)
+  slice_head(n=10) %>% 
+  knitr::kable()
 ```
-
-
+## County Trends  
 Let's look at this as County trends.
-```{r}
+```{r counties, fig.height= 8}
 vt_po_long %>% group_by(county1) %>% 
   count(year, name ="total_PO") %>% 
-  ggplot(aes(year, total_PO, color =county1)) +
+  ggplot(aes(year, total_PO, fill =county1)) +
   geom_area() +
-  facet_wrap(~county1) +
+  facet_wrap(~county1, ncol = 3) +
+  scale_fill_paletteer_d('rcartocolor::Safe') +
   theme(legend.position = "Null")
 ```
 
 Anymore when I do a facet wrap, I tend to go back to the {ggridges} package.
-```{r}
+```{r remedy05}
 vt_po_long %>% group_by(county1) %>% 
   count(year, name ="total_PO") %>%
   ggplot(aes(x= year, y = as.factor(county1), group = county1)) +
   geom_density_ridges(aes(height = total_PO), stat = "identity")
 ```
-```{r}
-vt_po_long %>% group_by(county1) %>% 
-  count(year, name ="total_PO") %>%
-  ggplot(aes(x= year, y= total_PO, fill = county1)) +
-  geom_stream()
-  
-```
+
 
 ### Left Standing
-```{r}
+```{r remedy06}
 vt_post_offices %>% 
   filter(is.na(discontinued)) %>% 
   ggplot(aes(established)) +
