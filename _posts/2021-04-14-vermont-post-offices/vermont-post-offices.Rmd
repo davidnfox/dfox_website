@@ -140,7 +140,7 @@ If you are familiar with Vermont geography, these trends closely match County si
 
 ### Left Standing
 
-Let's look at when post offices that were still open in 2000 were first established. Looks like the majority of the post offices still operating in 2000 were established between 1800 and 1850. This was the originall hey day of Vermont - after the Civil War, many people moved west. Interestingly there have been almost no new post offices established, despite Vermonts modestly growing population - which ticked up in the 1970s in particular.
+Let's look at when post offices that were still open in 2000 were first established. Looks like the majority of the post offices still operating in 2000 were established between 1800 and 1850. This was the original hey day of Vermont - after the Civil War, many people moved west. Interestingly there have been almost no new post offices established, despite Vermont's modestly growing population - which ticked up in the 1970s in particular.
 
 ```{r remedy06}
 vt_post_offices %>% 
@@ -154,7 +154,7 @@ vt_post_offices %>%
 
 ### Spatial
 
-Since we have lat/long coordinates, its trivially easy to make map out this data. I originally had ambitions to make an animated map, but the result turned out to be less than compelling, so here I'll just map the heyday of post offices in 1900 and what was left as of 2000. We'll pull County boundaries for context with the {[USAboundaries](https://docs.ropensci.org/USAboundaries/)} package.
+Since we have lat/long coordinates, its trivially easy to map out this data. I originally had ambitions to make an animated map, but the result turned out to be less than compelling, so here I'll just map the heyday of post offices in 1900 and what was left as of 2000. We'll pull County boundaries for context with the {[USAboundaries](https://docs.ropensci.org/USAboundaries/)} package.
 
 ```{r spatial}
 # Convert the latitude and longitude columns into a geographic feature

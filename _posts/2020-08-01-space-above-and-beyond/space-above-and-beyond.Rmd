@@ -53,7 +53,7 @@ astronauts %>%
   gt()
 ```
 
-I'm not sure what some of these roles are, also a little re-coding is in order to deal with redundant data categories. Some external research indicates that 'msp' probably stands for mission specialist, and 'psp' stands for payload specialist. This [wikipedia page](https://en.wikipedia.org/wiki/Astronaut_ranks_and_positions#Ranks) has more details. I'll recode these and lump all the tourists together -- sorry lone space journalist. One thing to watch out for with *case_when* is to make sure use double quotes, I was using single quotes and it was driving me nuts.
+I'm not sure what some of these roles are, also a little re-coding is in order to deal with redundant data categories. Some external research indicates that 'msp' probably stands for mission specialist, and 'psp' stands for payload specialist. This [wikipedia page](https://en.wikipedia.org/wiki/Astronaut_ranks_and_positions#Ranks) has more details. I'll recode these and lump all the tourists together -- sorry lone space journalist. One thing to watch out for with *case_when* is to make sure to use double quotes, I was using single quotes and could not figure out why things were not working.
 
 ```{r}
 astronauts_clean <- astronauts %>% 
@@ -66,7 +66,7 @@ astronauts_clean <- astronauts %>%
     role_factor = fct_lump_n(role, 5))
 ```
 
-### Gender Balance in space flight roles.
+### Gender balance in space flight roles.
 
 Some of the early pioneers in spaceflight were women. I'm curious about how the current gender roles look.
 
@@ -83,7 +83,7 @@ astronauts_clean %>%
 
 Not great - only 11% of astronauts have been women. Only 1% of mission commanders have been women, and less than 4% have been pilots. How does this look over time?
 
-```{r, layout="l-body-outset"}
+```{r, layout="l-body-outset", fig.height=6}
 
 set.seed(567)
 
@@ -111,7 +111,7 @@ ggplotly(p1, tooltip = "text")
 
 The previous chart shows a several strong pulses in the number of missions.
 
-```{r, layout="l-body-outset"}
+```{r, layout="l-body-outset", fig.height=6}
 missions  = astronauts %>% 
   distinct(mission_title, .keep_all = TRUE) %>% 
   select(year_of_mission, mission_title, ascend_shuttle, in_orbit, hours_mission)
@@ -135,7 +135,7 @@ ggplotly(p2, tooltip = "text")
 
 ### Mission hours have increased dramatically with space stations.
 
-```{r fig.height=5, layout="l-body-outset"}
+```{r fig.height=5, layout="l-body-outset", fig.height=6}
 p3 = ggplot(missions, aes(x= year_of_mission,
                           y = hours_mission,
                           size = hours_mission,
