@@ -1,0 +1,30 @@
+---
+title: "Projects"
+description: |
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(htmltools)
+source("R/create_proj_card.R")
+```
+
+```{r}
+
+create_proj_card(
+  img_src = "images/pv.png",
+  url = "https://maps.vcgi.vermont.gov/ParcelViewer/",
+  title = "Vermont Parcel Viewer",
+  text = "A simple web map interface for accessing Vermont land records.",
+  text2 = "We've only been waiting 200 years."
+)
+
+```
+
+
+
+
+
+
