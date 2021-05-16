@@ -9,7 +9,7 @@ create_proj_card <- function(img_src, url, title, text, text2){
     class = "card",
     tags$img(class="card-img-top",
              src=img_src,
-             style="width:300px;"),
+             style="width:400px;"),
     tags$div(
       class = "card-body",
       h4(
