@@ -1,0 +1,203 @@
+---
+title: "Nearest neighbors"
+description: |
+  A short description of the post.
+author:
+  - name: David Fox
+    url: {}
+date: 08-23-2020
+output:
+  distill::distill_article:
+    self_contained: false
+draft: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, layout="l-bodyoutset")
+```
+
+If you are into geospatial data, [Topi Tjukanov](https://twitter.com/tjukanov) is a great person to follow on Twitter. Fair warning - he's one of those people that is so productive they make you suspect they may actually be a collective of humans posing as a single person and sort of wonder what you are doing with your life. A million years ago - okay, in July - Topi started a [cool project](https://twitter.com/tjukanov/status/1283727009697411073) to calculate what part of a country was closest to its neighboring countries. I'm trying to push myself to do more of the spatial analysis that I would normally do in QGIS in R, so I thought I would recreate this analysis for Vermont.
+
+### Packages used
+
+```{r}
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthhires)
+library(tidyverse)
+library(paletteer)
+library(ggeasy)
+```
+
+### Get the data.
+
+An excellent source of worldwide spatial data is the [Natural Earth project](https://www.naturalearthdata.com/). This is open source boundary and base map data for the whole world. There is also an R package, [{rnaturalearth}](https://docs.ropensci.org/rnaturalearth/), which I'll use to get state boundaries for the US and Canada. If this is the first time you use this package, you may need to run devtools::install_github("ropensci/rnaturalearthhires") and you'll also need {rgeos} installed.
+
+```{r data}
+states <- ne_states(country = c("canada", "united states of america"),
+                    returnclass = "sf")
+```
+
+### Data Prep
+
+To do this analysis you need the states adjoining your area of interest, so for Vermont we need Quebec (technically a Province of Canada, but found in the Natural Earth data as a state), New York, Massachusetts, and New Hampshire. I'll put Vermont in its own feature. One thing to address is the natural earth data is in a lat/long projection, which is complicates some of the steps in this process. I'll use `sf::st_transform` to set the projection to the Albers ConUS projection, which is a good general projection for North America. The Natural Earth data has many attributes that are not needed here, so I'll select only the name (there are different language version of country names in the date, I'll use English - name_en).
+
+```{r filter states}
+vermont_adjoining <- states %>% 
+  select(state = name_en) %>% 
+  filter(state %in% c("Quebec", "Massachusetts", "New York", "New Hampshire")) %>% 
+  st_transform(5070) %>% 
+  st_cast("POLYGON")
+
+vermont <- states %>% 
+  select(state = name_en) %>%
+  filter(state == "Vermont") %>%
+  st_transform(5070)
+```
+
+### Sample Points
+
+The first step is to get a a grid of sample points across Vermont - I'll take a sample of 3,000 points, on a hexagonal grid. The number of points and the type of grid you use will impact the ultimate outline of the areas, so feel free to experiment here. The docs are not clear if this is a needed step, but I'll also set.seed here to keep the results consistent.
+
+```{r sample points}
+set.seed(1324)
+
+vermont_sample = st_sample(vermont, 3000, type="hexagonal") %>% st_as_sf()
+
+ggplot(vermont_sample) +
+  geom_sf(size = .5) +
+  labs(title = 'Vermont sampling points') +
+  theme_minimal()
+```
+
+### Nearest Features
+
+Now I can get the closest feature to each sample point, in this case the neighboring state. This why we left Vermont out of the first group. Doing spatial joins in {sf} can be counter intuitive if you are coming from a GIS or PostGIS background. A spatial join is achieved using the st_join function and **within** the call you specify the geographic relationship.
+
+```{r nearest feature}
+vermont_closest = vermont_sample %>%
+  st_join(vermont_adjoining, join= st_nearest_feature)
+
+ggplot(vermont_closest) +
+  geom_sf(aes(color = state), size = .5) +
+  theme_minimal() +
+  easy_move_legend("bottom") +
+  scale_color_paletteer_d("ochRe::lorikeet") +
+  labs(title = 'Vermont sampling points with closest state') +
+  theme(legend.title = element_blank())
+
+```
+
+### Points to polygons
+
+Basically we have the analysis here, but like a pointillist painting, this map is made up of our 3,000 sample points. How do we convert these points to areas? [Voronoi polygons](https://en.wikipedia.org/wiki/Voronoi_diagram/) are the area around a point that is closest to it, relative to adjacent points. These features have lots of geospatial applications. The `st_voronoi` function in {sf} does not seem to retain the attribute data I want, so once I create the polygons, I need to then join them back to their sampling point with the closest state.
+
+```{r voronoi}
+
+voronoi <-  vermont_closest %>%
+  st_union %>%
+  st_voronoi() %>%
+  st_collection_extract() %>%
+  st_as_sf()
+
+voronoi_state <- voronoi %>%
+  st_join(vermont_closest, join = st_intersects)
+
+ggplot(voronoi_state) +
+  geom_sf(aes(fill = state)) +
+  theme_minimal() +
+  easy_move_legend("bottom") +
+  scale_fill_paletteer_d("ochRe::lorikeet") +
+  labs(title = 'Vermont Voronoi polygons with closest state') +
+  theme(legend.title = element_blank())
+```
+
+### Merge by attributes
+
+This looks like a hot mess, but I can merge all the Voronoi polygons (Voronoies?) by state. This is usually called a dissolve in GIS software, but you actually only need {dplyr} syntax for this operation (which took me some digging to find out).
+
+```{r merge polygons}
+voronoi_combined <- voronoi_state %>%
+  group_by(state) %>%
+  summarise()
+
+ggplot(voronoi_combined) +
+  geom_sf(aes(fill = state)) +
+  geom_sf(data = vermont, color = "white", fill = NA) +
+  theme_minimal() +
+  easy_move_legend("bottom") +
+  scale_fill_paletteer_d("ochRe::lorikeet") +
+  labs(title = 'Merged voronoi polygons with closest state') +
+  theme(legend.title = element_blank())
+```
+
+### Clip
+
+The final step is to clip this back to the Vermont boundary. Since Quebec is massive, I'll extract a 150km bounding box around Vermont to limit the extent of the map showing adjacent States/Provinces.
+
+```{r clip}
+vt_bb = st_as_sfc(st_bbox(vermont)) 
+vt_bb = st_buffer(vt_bb, dist = 150000)
+
+vermont_closest_neighbor = st_intersection(vermont, voronoi_combined)
+
+ggplot(vermont_closest_neighbor) +
+  geom_sf(data = vermont_adjoining, aes(fill = state)) +
+  geom_sf(aes(fill = state.1), alpha = .7, color = "white") +
+  scale_fill_paletteer_d("ochRe::lorikeet") +
+  geom_sf(data = vermont_adjoining, aes(fill = state)) +
+  coord_sf(xlim = st_bbox(vt_bb)[c(1,3)],
+           ylim = st_bbox(vt_bb)[c(2,4)]) +
+  labs(title = "Vermont's closest neighboring State/Provice") +
+  theme_minimal() +
+  theme(legend.title = element_blank()) +
+  easy_move_legend("bottom")
+```
+
+### Combined work flow
+
+I've broken these steps up to show what each one does - which is also how I figured it out the first time - but this can be done in a couple of unified pipes, so let's look at that for my home state of Colorado.
+
+```{r colorado data}
+colorado_adjoining <- states %>% 
+  select(state = name_en) %>% 
+  filter(state %in% c("Arizona", "Wyoming", "Utah", "Kansas", "Nebraska", "Oklahoma", "New Mexico")) %>% 
+  st_transform(5070) 
+
+colorado <- states %>% 
+  select(state = name_en) %>%
+  filter(state == "Colorado")%>%
+  st_transform(5070)
+```
+
+```{r colorado analysis}
+set.seed(56721)
+
+colorado_closest_points = st_sample(colorado, 5000, type = "hexagonal") %>%
+  st_as_sf() %>% 
+  st_join(colorado_adjoining, join= st_nearest_feature)
+
+colorado_neighbors <- colorado_closest_points %>% 
+  st_union %>%
+  st_voronoi() %>%
+  st_collection_extract() %>%
+  st_as_sf() %>% 
+  st_join(colorado_closest_points, join = st_intersects) %>% 
+  group_by(state) %>%
+  summarise() %>% 
+  st_intersection(colorado)
+
+ggplot(colorado_neighbors) +
+  geom_sf(aes(fill = state), alpha = .7, color = "grey90") +
+  scale_fill_paletteer_d("ochRe::tasmania") +
+  geom_sf(data = colorado_adjoining, aes(fill = state)) +
+  labs(title = "Colorado's closest neighboring States") +
+  theme_minimal() +
+  theme(legend.title = element_blank()) +
+  easy_move_legend("bottom")
+
+```
+
+### Parting thoughts
+
+I see advantages and disadvantages to do this kind of work in R versus a traditional desktop GIS. For reproducability and sharing code, R is a clear favorite. Once I had the code working, it was easy to change things like projections and sampling rates. I was also able to quickly apply the same code to Colorado that I built for Vermont. Desktop tools do have model building features that let you do similar work flows, but in my experience they are harder to set up and sharing is much more difficult. Coming from a more tradition GIS background, I do find parts of {sf} to be opaque - it can be much pickier about spatial types and sometimes creates spatial data - like a geometry collection (I'm looking at you `st_voronoi` )- that cannot be used again without casting to a different type. You can in the code see that I have to do this in several places to overcome these hurdles. Cartography is also a place where I think R has some catching up to do - there are ways to make incredible maps with packages like {ggplpot} and {tmap}, but sometimes simple things like labeling your shapes can be quite burdensome - you may have noticed I left state labels off the maps. If this was a production project, I would be tempted to use R for the data munging and creating the neighboring states outputs then passing them off to QGIS for a nice polish. Admittedly, this is part of the learning curve for adding a new tool to the arsenal.
