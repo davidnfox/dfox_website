@@ -129,13 +129,13 @@ deceased_sf <- deceased %>%
   st_as_sf(., coords = c("deploy_off_longitude", "deploy_off_latitude"), crs = 4326)
 ```
 
-{[Mapview](https://github.com/r-spatial/mapview)} is an excellent package for interactive mapping in R that goes a bit beyond ggplot. Other good mapping packages worth checking out are {[tmap](https://github.com/mtennekes/tmap)} and {[mapdeck](https://github.com/SymbolixAU/mapdeck)}.
+{[tmap](https://github.com/mtennekes/tmap)} is an excellent package for interactive mapping in R that goes a bit beyond ggplot. Other good mapping packages worth checking out are {[Mapview](https://github.com/r-spatial/mapview)} and {[mapdeck](https://github.com/SymbolixAU/mapdeck)}.
 
-```{r echo=TRUE, fig.height=8, fig.width=8}
-map1 <- mapview(deceased_sf,
-        layer.name = "Caribou causes of death",
-        zcol = "cause_of_death",
-        col.regions  = viridisLite:: plasma)
+```{r echo=TRUE, fig.height=8, fig.width=8, layout="l-body-outset"}
+tmap_mode("view")
 
-map1
+tm_shape(deceased_sf) +
+  tm_dots(col = "cause_of_death", 
+             palette = "plasma")
+
 ```
