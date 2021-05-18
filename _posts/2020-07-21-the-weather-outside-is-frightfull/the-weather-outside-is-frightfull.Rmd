@@ -187,8 +187,8 @@ weather_long %>% filter(hazard == 'rip_curr') %>%
   ggplot(aes(x= year, y = fatalities)) +
   geom_point(size = 3, color = '#d1ab75') +
   xlim(2000, 2019) + 
-  geom_smooth(method = 'gam', se = FALSE) +
-  labs(title = "Fatalities attributed to rip currents \nhave increased since nmeasures began in 2002.",
+  geom_smooth(method = 'gam', se = TRUE) +
+  labs(title = "Fatalities attributed to rip currents \nhave increased since data collection started in 2002.",
        caption  ="NWS",
        x = NULL,
        y = 'fatalities') +
