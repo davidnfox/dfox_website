@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = FALSE)
   
 After graduate school I worked for the Albemarle County Planning department. I did  general cartographic work, like this map for the annual report on new trail connectivity.
 
-```{r, layout="l-body-outset", fig.height=4}
+```{r, layout="l-body-outset", fig.height=2}
 knitr::include_graphics("images/Bike and Ped.jpg")
 ```
 
