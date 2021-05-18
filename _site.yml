@@ -16,3 +16,4 @@ navbar:
     - text: "CV"
       href: content/resume.pdf
 output: distill::distill_article
+theme: theme.css
