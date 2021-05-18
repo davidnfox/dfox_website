@@ -1514,7 +1514,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <p><img src="vermont-post-offices_files/figure-html5/remedy02-1.png" width="624" /></p>
 </div>
-<p>It would be nice to show this as the total number of post offices. I was thinking about doing a cumulative sum and then subtracting a cumulative sum of discounted post offices. However this doesn’t give the history of each individual post office, which is what we need if we want a time series map. When I’m doing a Tidy Tuesday project I try to avoid watching David Robinson’s video first, so I don’t just copy his approach. In this case, I was a bit stumped on how to pivot having all the years a post office was extant. Of course - David showcased what I needed to do. What he does is create a new column that is a nested list of the sequence of years between when the post office was established and discontinued, then unnests the list. This will give us one row for each year a post office was open. One thing to watch is that the data has NA for post offices that are still around, so we need to change that to a real value. Looking at the data, it should be valid up to 2000.</p>
+<p>It would be nice to show this as the total number of post offices. I was thinking about doing a cumulative sum and then subtracting a cumulative sum of closed post offices. However this doesn’t give the history of each individual post office, which is what we need if we want a time series map. When I’m doing a Tidy Tuesday project I try to avoid watching David Robinson’s video first, so I don’t just copy his approach. In this case, I was a bit stumped on how to pivot having all the years a post office was extant. Of course - David showcased what I needed to do. What he does is create a new column that is a nested list of the sequence of years between when the post office was established and discontinued, then unnests the list. This will give us one row for each year a post office was open. One thing to watch is that the data has NA for post offices that are still around, so we need to change that to a real value. Looking at the data, it should be valid up to 2000.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>vt_po_long</span> <span class='op'>&lt;-</span> <span class='va'>vt_post_offices</span> <span class='op'>%&gt;%</span> 
@@ -1763,7 +1763,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <p>If you are familiar with Vermont geography, these trends closely match County sizes. While correlated with population, there are some outliers. Chittenden County is the most populous county, but in 2000 at least looks to have fewer post offices left than Rutland or Windsor.</p>
 <h3 id="left-standing">Left Standing</h3>
-<p>Let’s look at when post offices that were still open in 2000 were first established. Looks like the majority of the post offices still operating in 2000 were established between 1800 and 1850. This was the originall hey day of Vermont - after the Civil War, many people moved west. Interestingly there have been almost no new post offices established, despite Vermonts modestly growing population - which ticked up in the 1970s in particular.</p>
+<p>Let’s look at when post offices that were still open in 2000 were first established. Looks like the majority of the post offices still operating in 2000 were established between 1800 and 1850. This was the original hey day of Vermont - after the Civil War, many people moved west. Interestingly there have been almost no new post offices established, despite Vermont’s modestly growing population - which ticked up in the 1970s in particular.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>vt_post_offices</span> <span class='op'>%&gt;%</span> 
@@ -1778,7 +1778,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p><img src="vermont-post-offices_files/figure-html5/remedy06-1.png" width="624" /></p>
 </div>
 <h3 id="spatial">Spatial</h3>
-<p>Since we have lat/long coordinates, its trivially easy to make map out this data. I originally had ambitions to make an animated map, but the result turned out to be less than compelling, so here I’ll just map the heyday of post offices in 1900 and what was left as of 2000. We’ll pull County boundaries for context with the {<a href="https://docs.ropensci.org/USAboundaries/">USAboundaries</a>} package.</p>
+<p>Since we have lat/long coordinates, its trivially easy to map out this data. I originally had ambitions to make an animated map, but the result turned out to be less than compelling, so here I’ll just map the heyday of post offices in 1900 and what was left as of 2000. We’ll pull County boundaries for context with the {<a href="https://docs.ropensci.org/USAboundaries/">USAboundaries</a>} package.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Convert the latitude and longitude columns into a geographic feature</span>
