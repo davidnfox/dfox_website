@@ -11,7 +11,10 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE,
+                      fig.asp = 0.7,
+                      out.width = "100%",
+                      layout= "l-body-outset")
 library(tidyverse)
 library(here)
 library(hrbrthemes)
@@ -26,14 +29,16 @@ library(ggridges)
 library(ggdist)
 library(ggalt)
 library(viridisLite)
-theme_set(theme_ipsum_rc())
+
+theme_set(theme_ipsum_rc() 
+          + theme(plot.title = element_text(size=12)))
 ```
 
 ## Weather fatalities.
 
 This post was inspired by this chart tweeted out by my local NWS office. Let me say off the bat that I have a very high regard for what the National Weather Service does (put down the sharpie), but this data visualization left me a bit --- unsatisfied.
 
-```{r, layout="l-body-outset"}
+```{r}
 knitr::include_graphics(here("_posts/2020-07-21-the-weather-outside-is-frightfull/nws_chart.jpg"))
 ```
 
@@ -43,7 +48,7 @@ Thomas Mock recently outlined a method for scrapping pdf's on his [blog](https:/
 
 I also tried the {[tabulizer](https://github.com/ropensci/tabulizer)} package as detailed [here.](https://www.business-science.io/code-tools/2019/09/23/tabulizer-pdf-scraping.html) With apologies to Thomas, this was easier - although I had so do some gyrations to deal with the table being split over two pages. Edward Tufte has been credited with the phrase "chart junk" which describes unnecessary or downright confusing "extras" added to charts, often obscuring the fact that they would be better off as a table. This NWS chart is suffering a slight case of chart junk, but I wonder if there is an equivalent phrase to capture what is going on in this table, with extra comments in what should be columns, as well as column names showing up again at the bottom of the table on the seconds page.
 
-```{r tablulizer, echo=TRUE, layout="l-body-outset", cache=TRUE}
+```{r tablulizer, cache=TRUE}
 pdf = here("_posts/2020-07-21-the-weather-outside-is-frightfull/80years.pdf")
 
 table_scrape <-  extract_tables(file = pdf,
@@ -72,7 +77,7 @@ weather_df %>% head() %>% gt()
 
 I'll use the excellent {[janitor](http://sfirke.github.io/janitor/index.html)} package to clean up the column names, a little regex to get the text out of the all_events column, and then convert all columns to numeric with the new 'across' verb in {dplyr}.
 
-```{r echo=TRUE}
+```{r }
 weather_cleaned = weather_df %>%
   clean_names() %>% 
   rename(damages_millions = all_hazard, all_events = all_wx) %>% 
@@ -83,7 +88,7 @@ weather_cleaned = weather_df %>%
 
 Now that was a lot of trouble for a simple data table. First, let's recreate the NWS chart (minus the 3D). This will require some summary stats for the - somewhat arbitrary - time periods compared.
 
-```{r echo=TRUE}
+```{r }
 wx_2019 = weather_cleaned %>%
   filter(year == 2019) %>% 
   mutate(year = as.character(year))
@@ -110,7 +115,7 @@ wx_trends_long = wx_trends %>%
 
 I think there are a number of issues with the original chart, particularly the ordering of the time periods and the unsorted arrangement of the hazards, even the title is a bit confusing. Let's take a stab at these. I'll use the nice new ggplot function to offset the column names.
 
-```{r, layout="l-body-outset"}
+```{r}
 ggplot(wx_trends_long, aes(fct_reorder(hazard, fatalities), fatalities,  fill = year)) +
   geom_col(position = "dodge") +
   scale_fill_ipsum() +
@@ -134,7 +139,7 @@ weather_long = weather_cleaned %>%
 
 One way to approach this would be a faceted plot.
 
-```{r,layout="l-body-outset", fig.height=8}
+```{r,fig.asp = 1}
 weather_long %>% filter(hazard != 'all_events') %>% 
   ggplot(aes(x= year, y = fatalities, color = fct_reorder(hazard, fatalities))) +
   geom_smooth(method = "gam", formula = y ~ s(x, bs = "tp"), se = FALSE) +
@@ -154,7 +159,7 @@ weather_long %>% filter(hazard != 'all_events') %>%
 
 Getting better - but how about some ridges?
 
-```{r ridges, layout="l-body-outset", fig.height=6}
+```{r ridges}
 weather_long %>% filter(hazard != 'all_events') %>% 
   ggplot(aes(x= year, y = hazard, height = fatalities, fill = fct_reorder(hazard, fatalities))) +
   geom_density_ridges(stat="identity", alpha = .5) +
@@ -168,7 +173,7 @@ weather_long %>% filter(hazard != 'all_events') %>%
 
 I think you could make an argument for either of these plots. The faceted plot shows actual trends and data points, but the ridge plot gives a better comparison between the groups and shows that most of these patterns look stochastic. However lightning and rip currents are interesting. Lightning fatalities have dropped dramatically since the 1940s. If we were to make this a per capital rate the change would be even more dramatic. Speculatively - there may be many fewer people working in the agricultural sector that might be exposed to lightening, also increased weather forecasting may be playing a role - most of us are carrying around an up to date weather forecast in our our pockets.
 
-```{r lightning, layout="l-body-outset", fig.height=6}
+```{r lightning}
 weather_long %>% filter(hazard == 'lightning') %>% 
   ggplot(aes(x= year, y = fatalities)) +
   geom_smooth(method= "gam") +
@@ -182,7 +187,7 @@ weather_long %>% filter(hazard == 'lightning') %>%
 
 Fatalities related to rip current shows the opposite trend, a steep increase since this metric started to be measured in 2002. This increase is likely related to per capital swimming and beach going, rather than any increase in rip currents themselves. Still, be careful on the beach - I can attest from personal experience that being in a rip current is quite terrifying.
 
-```{r rip, layout="l-body-outset", fig.height=6}
+```{r rip}
 weather_long %>% filter(hazard == 'rip_curr') %>% 
   ggplot(aes(x= year, y = fatalities)) +
   geom_point(size = 3, color = '#d1ab75') +
@@ -197,7 +202,7 @@ weather_long %>% filter(hazard == 'rip_curr') %>%
 
 We can also take a quick look at all hazard fatalities - which have trended flat, with the exceptions of some bad years. Never the less, let's be careful out there folks.
 
-```{r all haz, layout="l-body-outset", fig.height=6}
+```{r all haz}
 weather_long %>% filter(hazard == 'all_events') %>% 
   ggplot(aes(x= year, y = fatalities, color = fatalities)) +
   geom_point(aes(size = fatalities), show.legend = FALSE) +
