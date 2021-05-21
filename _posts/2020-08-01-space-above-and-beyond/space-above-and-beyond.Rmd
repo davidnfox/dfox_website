@@ -12,7 +12,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.height = 4)
+knitr::opts_chunk$set(echo = TRUE, fig.asp = 1,
+                      layout="l-body-outset")
 
 library(tidytuesdayR)
 library(tidyverse)
@@ -83,7 +84,7 @@ astronauts_clean %>%
 
 Not great - only 11% of astronauts have been women. Only 1% of mission commanders have been women, and less than 4% have been pilots. How does this look over time?
 
-```{r, layout="l-body-outset", fig.height=6}
+```{r}
 
 set.seed(567)
 
@@ -111,7 +112,7 @@ ggplotly(p1, tooltip = "text")
 
 The previous chart shows a several strong pulses in the number of missions.
 
-```{r, layout="l-body-outset", fig.height=6}
+```{r}
 missions  = astronauts %>% 
   distinct(mission_title, .keep_all = TRUE) %>% 
   select(year_of_mission, mission_title, ascend_shuttle, in_orbit, hours_mission)
@@ -125,7 +126,7 @@ p2 = missions %>% group_by(year_of_mission) %>%
              text = paste(year_of_mission, ":", mission_count))) +
     geom_point(alpha = .5) + 
     scale_color_viridis_c(option = "plasma") +
-  labs(title = str_wrap("After a heyday in the 90s the number of flights has declined to the level of the 1960's."),
+  labs(title = str_wrap("After a heyday in the 90s the number of flights \nhas declined to the level of the 1960's."),
        x= NULL,
        y = 'missions') +
   theme(legend.position = "none")
@@ -135,7 +136,7 @@ ggplotly(p2, tooltip = "text")
 
 ### Mission hours have increased dramatically with space stations.
 
-```{r fig.height=5, layout="l-body-outset", fig.height=6}
+```{r }
 p3 = ggplot(missions, aes(x= year_of_mission,
                           y = hours_mission,
                           size = hours_mission,
@@ -144,7 +145,7 @@ p3 = ggplot(missions, aes(x= year_of_mission,
   geom_jitter(alpha = .5) +
   #geom_smooth(se = FALSE) +
   scale_color_viridis_c(option = "plasma") +
-  labs(title = "Although number of missions has declined, \ntime is space has increased dramitically.",
+  labs(title = "Although number of missions has declined, \ntime is space has increased dramatically.",
        x= "",
        y = "mission hours") + 
   theme(legend.position = 'none') +
