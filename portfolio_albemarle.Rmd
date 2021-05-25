@@ -9,11 +9,17 @@ knitr::opts_chunk$set(echo = FALSE, layout = "l-body-outset")
 
 Testing Github link to image. 
 
-## 5th and Avon
-
-[![](https://github.com/davidnfox/portfolio/blob/main/5th_Avon_pipeline.png?raw=true)](https://github.com/davidnfox/portfolio/blob/main/5th_Avon_pipeline.png?raw=true)
+### [Development Pipeline](https://github.com/davidnfox/portfolio/blob/main/5th_Avon_pipeline.png?raw=true)
+```{r}
+knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/5th_Avon_pipeline.png?raw=true")
+```
 
 I did some stuff
+
+### [GIF!](https://github.com/davidnfox/portfolio/blob/main/weekly_150.gif?raw=true)
+```{r}
+include_graphics("https://github.com/davidnfox/portfolio/blob/main/weekly_150.gif?raw=true")
+```
 
 
 
