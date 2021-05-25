@@ -154,7 +154,7 @@ vt_post_offices %>%
 
 ### Spatial
 
-Since we have lat/long coordinates, its trivially easy to map out this data. I originally had ambitions to make an animated map, but the result turned out to be less than compelling, so here I'll just map the heyday of post offices in 1900 and what was left as of 2000. We'll pull County boundaries for context with the {[USAboundaries](https://docs.ropensci.org/USAboundaries/)} package.
+Since we have lat/long coordinates, it is strait forward to map out this data. I originally had ambitions to make an animated map, but the result turned out to be less than compelling, so here I'll just map the heyday of post offices in 1900 and what was left as of 2000. We'll pull County boundaries for context with the {[USAboundaries](https://docs.ropensci.org/USAboundaries/)} package.
 
 ```{r spatial}
 # Convert the latitude and longitude columns into a geographic feature
@@ -169,7 +169,7 @@ po_spatial <- vt_po_long %>%
 vt_counties <- us_counties(states = "Vermont")
 ```
 
-```{r, fig.height= 8}
+```{r, fig.height= 8, layout = "l-body-outset"}
 ggplot(data=vt_counties) +
   geom_sf() +
   geom_sf(data = po_spatial, aes(color = established), alpha = .6) +
