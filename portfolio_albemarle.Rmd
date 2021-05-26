@@ -7,7 +7,11 @@ library(knitr)
 knitr::opts_chunk$set(echo = FALSE, layout = "l-body-outset")
 ```
 
-Testing Github link to image. 
+### [Bike and Ped](https://github.com/davidnfox/portfolio/blob/main/bike_ped.jpg?raw=true)
+```{r}
+knitr::include_graphics("images/bike_ped.png")
+```
+
 
 ### [Development Pipeline](https://github.com/davidnfox/portfolio/blob/main/5th_Avon_pipeline.png?raw=true)
 ```{r}
@@ -20,6 +24,12 @@ I did some stuff
 ```{r}
 include_graphics("https://github.com/davidnfox/portfolio/blob/main/weekly_150.gif?raw=true")
 ```
+
+
+```{r}
+
+```
+
 
 
 
