@@ -1,5 +1,5 @@
 ---
-title: "Space Above and Beyond"
+title: "Space, Above and Beyond"
 description: |
   Tidy Tuesday Astronaut data.
 author:
@@ -42,7 +42,7 @@ skim(astronauts)
 
 ```
 
-#### Roles in spaceflight
+### Roles in spaceflight
 
 Occupation, which seems to mean mission role, looks like an interesting variable to explore. First order to is to eliminate any capitalization inconsistencies - which seem to plague all data. There is a lot of discussion about the pros and cons of SQL, but one of the advantages of a database structure is the ability to create rules that keep inconsistent data from ever getting into the data stream.
 

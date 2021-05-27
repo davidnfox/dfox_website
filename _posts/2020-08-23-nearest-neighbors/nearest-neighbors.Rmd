@@ -1,7 +1,7 @@
 ---
 title: "Nearest neighbors"
 description: |
-  A short description of the post.
+  Spatial data handling in R.
 author:
   - name: David Fox
     url: {}
@@ -9,11 +9,11 @@ date: 08-23-2020
 output:
   distill::distill_article:
     self_contained: false
-draft: true
+draft: false
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, layout="l-bodyoutset")
+knitr::opts_chunk$set(echo = TRUE, layout="l-body-outset")
 ```
 
 If you are into geospatial data, [Topi Tjukanov](https://twitter.com/tjukanov) is a great person to follow on Twitter. Fair warning - he's one of those people that is so productive they make you suspect they may actually be a collective of humans posing as a single person and sort of wonder what you are doing with your life. A million years ago - okay, in July - Topi started a [cool project](https://twitter.com/tjukanov/status/1283727009697411073) to calculate what part of a country was closest to its neighboring countries. I'm trying to push myself to do more of the spatial analysis that I would normally do in QGIS in R, so I thought I would recreate this analysis for Vermont.

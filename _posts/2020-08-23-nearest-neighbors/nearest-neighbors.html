@@ -23,6 +23,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -87,7 +88,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_meta_tags-->
   <title>Nearest neighbors</title>
 
-  <meta property="description" itemprop="description" content="A short description of the post."/>
+  <meta property="description" itemprop="description" content="Spatial data handling in R."/>
 
 
   <!--  https://schema.org/Article -->
@@ -98,24 +99,24 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="Nearest neighbors"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="A short description of the post."/>
+  <meta property="og:description" content="Spatial data handling in R."/>
   <meta property="og:locale" content="en_US"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
   <meta property="twitter:title" content="Nearest neighbors"/>
-  <meta property="twitter:description" content="A short description of the post."/>
+  <meta property="twitter:description" content="Spatial data handling in R."/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","draft"]}},"value":[{"type":"character","attributes":{},"value":["Nearest neighbors"]},{"type":"character","attributes":{},"value":["A short description of the post.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["David Fox"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["08-23-2020"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"logical","attributes":{},"value":[true]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","draft"]}},"value":[{"type":"character","attributes":{},"value":["Nearest neighbors"]},{"type":"character","attributes":{},"value":["Spatial data handling in R.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["David Fox"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["08-23-2020"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"logical","attributes":{},"value":[false]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["nearest-neighbors_files/anchor-4.2.2/anchor.min.js","nearest-neighbors_files/bowser-1.9.3/bowser.min.js","nearest-neighbors_files/distill-2.2.21/template.v2.js","nearest-neighbors_files/figure-html5/clip-1.png","nearest-neighbors_files/figure-html5/colorado analysis-1.png","nearest-neighbors_files/figure-html5/merge polygons-1.png","nearest-neighbors_files/figure-html5/nearest feature-1.png","nearest-neighbors_files/figure-html5/sample points-1.png","nearest-neighbors_files/figure-html5/voronoi-1.png","nearest-neighbors_files/header-attrs-2.7/header-attrs.js","nearest-neighbors_files/jquery-1.11.3/jquery.min.js","nearest-neighbors_files/popper-2.6.0/popper.min.js","nearest-neighbors_files/tippy-6.2.7/tippy-bundle.umd.min.js","nearest-neighbors_files/tippy-6.2.7/tippy-light-border.css","nearest-neighbors_files/tippy-6.2.7/tippy.css","nearest-neighbors_files/tippy-6.2.7/tippy.umd.min.js","nearest-neighbors_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["nearest-neighbors_files/anchor-4.2.2/anchor.min.js","nearest-neighbors_files/bowser-1.9.3/bowser.min.js","nearest-neighbors_files/distill-2.2.21/template.v2.js","nearest-neighbors_files/figure-html5/clip-1.png","nearest-neighbors_files/figure-html5/colorado analysis-1.png","nearest-neighbors_files/figure-html5/merge polygons-1.png","nearest-neighbors_files/figure-html5/nearest feature-1.png","nearest-neighbors_files/figure-html5/sample points-1.png","nearest-neighbors_files/figure-html5/voronoi-1.png","nearest-neighbors_files/header-attrs-2.7/header-attrs.js","nearest-neighbors_files/header-attrs-2.8/header-attrs.js","nearest-neighbors_files/jquery-1.11.3/jquery.min.js","nearest-neighbors_files/popper-2.6.0/popper.min.js","nearest-neighbors_files/tippy-6.2.7/tippy-bundle.umd.min.js","nearest-neighbors_files/tippy-6.2.7/tippy-light-border.css","nearest-neighbors_files/tippy-6.2.7/tippy.css","nearest-neighbors_files/tippy-6.2.7/tippy.umd.min.js","nearest-neighbors_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1433,7 +1434,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="nearest-neighbors_files/header-attrs-2.7/header-attrs.js"></script>
+  <script src="nearest-neighbors_files/header-attrs-2.8/header-attrs.js"></script>
   <script src="nearest-neighbors_files/jquery-1.11.3/jquery.min.js"></script>
   <script src="nearest-neighbors_files/popper-2.6.0/popper.min.js"></script>
   <link href="nearest-neighbors_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -1454,7 +1455,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Nearest neighbors","description":"A short description of the post.","authors":[{"author":"David Fox","authorURL":{},"affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2020-08-23T00:00:00.000-04:00","citationText":"Fox, 2020"}
+{"title":"Nearest neighbors","description":"Spatial data handling in R.","authors":[{"author":"David Fox","authorURL":{},"affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2020-08-23T00:00:00.000-04:00","citationText":"Fox, 2020"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1467,7 +1468,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h1>Nearest neighbors</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p><p>A short description of the post.</p></p>
+<p><p>Spatial data handling in R.</p></p>
 </div>
 
 <div class="d-byline">
@@ -1479,7 +1480,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-article">
 <p>If you are into geospatial data, <a href="https://twitter.com/tjukanov">Topi Tjukanov</a> is a great person to follow on Twitter. Fair warning - he’s one of those people that is so productive they make you suspect they may actually be a collective of humans posing as a single person and sort of wonder what you are doing with your life. A million years ago - okay, in July - Topi started a <a href="https://twitter.com/tjukanov/status/1283727009697411073">cool project</a> to calculate what part of a country was closest to its neighboring countries. I’m trying to push myself to do more of the spatial analysis that I would normally do in QGIS in R, so I thought I would recreate this analysis for Vermont.</p>
 <h3 id="packages-used">Packages used</h3>
-<div class="layout-chunk" data-layout="l-bodyoutset">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-spatial.github.io/sf/'>sf</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ropenscilabs/rnaturalearth'>rnaturalearth</a></span><span class='op'>)</span>
@@ -1492,7 +1493,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <h3 id="get-the-data.">Get the data.</h3>
 <p>An excellent source of worldwide spatial data is the <a href="https://www.naturalearthdata.com/">Natural Earth project</a>. This is open source boundary and base map data for the whole world. There is also an R package, <a href="https://docs.ropensci.org/rnaturalearth/">{rnaturalearth}</a>, which I’ll use to get state boundaries for the US and Canada. If this is the first time you use this package, you may need to run devtools::install_github(“ropensci/rnaturalearthhires”) and you’ll also need {rgeos} installed.</p>
-<div class="layout-chunk" data-layout="l-bodyoutset">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>states</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/rnaturalearth/man/ne_states.html'>ne_states</a></span><span class='op'>(</span>country <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"canada"</span>, <span class='st'>"united states of america"</span><span class='op'>)</span>,
                     returnclass <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span>
@@ -1501,7 +1502,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <h3 id="data-prep">Data Prep</h3>
 <p>To do this analysis you need the states adjoining your area of interest, so for Vermont we need Quebec (technically a Province of Canada, but found in the Natural Earth data as a state), New York, Massachusetts, and New Hampshire. I’ll put Vermont in its own feature. One thing to address is the natural earth data is in a lat/long projection, which is complicates some of the steps in this process. I’ll use <code>sf::st_transform</code> to set the projection to the Albers ConUS projection, which is a good general projection for North America. The Natural Earth data has many attributes that are not needed here, so I’ll select only the name (there are different language version of country names in the date, I’ll use English - name_en).</p>
-<div class="layout-chunk" data-layout="l-bodyoutset">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>vermont_adjoining</span> <span class='op'>&lt;-</span> <span class='va'>states</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>select</span><span class='op'>(</span>state <span class='op'>=</span> <span class='va'>name_en</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
@@ -1518,7 +1519,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <h3 id="sample-points">Sample Points</h3>
 <p>The first step is to get a a grid of sample points across Vermont - I’ll take a sample of 3,000 points, on a hexagonal grid. The number of points and the type of grid you use will impact the ultimate outline of the areas, so feel free to experiment here. The docs are not clear if this is a needed step, but I’ll also set.seed here to keep the results consistent.</p>
-<div class="layout-chunk" data-layout="l-bodyoutset">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1324</span><span class='op'>)</span>
 
@@ -1534,7 +1535,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <h3 id="nearest-features">Nearest Features</h3>
 <p>Now I can get the closest feature to each sample point, in this case the neighboring state. This why we left Vermont out of the first group. Doing spatial joins in {sf} can be counter intuitive if you are coming from a GIS or PostGIS background. A spatial join is achieved using the st_join function and <strong>within</strong> the call you specify the geographic relationship.</p>
-<div class="layout-chunk" data-layout="l-bodyoutset">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>vermont_closest</span> <span class='op'>=</span> <span class='va'>vermont_sample</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_join.html'>st_join</a></span><span class='op'>(</span><span class='va'>vermont_adjoining</span>, join<span class='op'>=</span> <span class='va'>st_nearest_feature</span><span class='op'>)</span>
@@ -1552,7 +1553,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <h3 id="points-to-polygons">Points to polygons</h3>
 <p>Basically we have the analysis here, but like a pointillist painting, this map is made up of our 3,000 sample points. How do we convert these points to areas? <a href="https://en.wikipedia.org/wiki/Voronoi_diagram/">Voronoi polygons</a> are the area around a point that is closest to it, relative to adjacent points. These features have lots of geospatial applications. The <code>st_voronoi</code> function in {sf} does not seem to retain the attribute data I want, so once I create the polygons, I need to then join them back to their sampling point with the closest state.</p>
-<div class="layout-chunk" data-layout="l-bodyoutset">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>voronoi</span> <span class='op'>&lt;-</span>  <span class='va'>vermont_closest</span> <span class='op'>%&gt;%</span>
   <span class='va'>st_union</span> <span class='op'>%&gt;%</span>
@@ -1576,7 +1577,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <h3 id="merge-by-attributes">Merge by attributes</h3>
 <p>This looks like a hot mess, but I can merge all the Voronoi polygons (Voronoies?) by state. This is usually called a dissolve in GIS software, but you actually only need {dplyr} syntax for this operation (which took me some digging to find out).</p>
-<div class="layout-chunk" data-layout="l-bodyoutset">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>voronoi_combined</span> <span class='op'>&lt;-</span> <span class='va'>voronoi_state</span> <span class='op'>%&gt;%</span>
   <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>state</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
@@ -1596,7 +1597,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <h3 id="clip">Clip</h3>
 <p>The final step is to clip this back to the Vermont boundary. Since Quebec is massive, I’ll extract a 150km bounding box around Vermont to limit the extent of the map showing adjacent States/Provinces.</p>
-<div class="layout-chunk" data-layout="l-bodyoutset">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>vt_bb</span> <span class='op'>=</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_as_sfc.html'>st_as_sfc</a></span><span class='op'>(</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_bbox.html'>st_bbox</a></span><span class='op'>(</span><span class='va'>vermont</span><span class='op'>)</span><span class='op'>)</span> 
 <span class='va'>vt_bb</span> <span class='op'>=</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/geos_unary.html'>st_buffer</a></span><span class='op'>(</span><span class='va'>vt_bb</span>, dist <span class='op'>=</span> <span class='fl'>150000</span><span class='op'>)</span>
@@ -1620,7 +1621,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <h3 id="combined-work-flow">Combined work flow</h3>
 <p>I’ve broken these steps up to show what each one does - which is also how I figured it out the first time - but this can be done in a couple of unified pipes, so let’s look at that for my home state of Colorado.</p>
-<div class="layout-chunk" data-layout="l-bodyoutset">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>colorado_adjoining</span> <span class='op'>&lt;-</span> <span class='va'>states</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>select</span><span class='op'>(</span>state <span class='op'>=</span> <span class='va'>name_en</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
@@ -1634,7 +1635,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </code></pre>
 </div>
 </div>
-<div class="layout-chunk" data-layout="l-bodyoutset">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>56721</span><span class='op'>)</span>
 

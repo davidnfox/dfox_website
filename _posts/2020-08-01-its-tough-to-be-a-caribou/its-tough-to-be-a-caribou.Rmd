@@ -1,5 +1,5 @@
 ---
-title: "Its tough to be a caribou."
+title: "It's tough to be a caribou"
 description: |
   Tidy Tuesday caribou tracking data.
 author:
