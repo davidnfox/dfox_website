@@ -12,26 +12,22 @@ knitr::opts_chunk$set(echo = FALSE, layout = "l-body-outset")
 knitr::include_graphics("images/bike_ped.png")
 ```
 
-
 ### [Development Pipeline](https://github.com/davidnfox/portfolio/blob/main/5th_Avon_pipeline.png?raw=true)
 ```{r}
 knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/5th_Avon_pipeline.png?raw=true")
 ```
 
-I did some stuff
-
-### [GIF!](https://github.com/davidnfox/portfolio/blob/main/weekly_150.gif?raw=true)
+### [Development pattern GIF](https://github.com/davidnfox/portfolio/blob/main/weekly_150.gif?raw=true)
 ```{r}
 include_graphics("https://github.com/davidnfox/portfolio/blob/main/weekly_150.gif?raw=true")
 ```
-
 
 ### [Traffic Analysis](https://github.com/davidnfox/portfolio/blob/main/volume-crashes.jpg?raw=true)
 ```{r}
 include_graphics("https://github.com/davidnfox/portfolio/blob/main/volume-crashes.jpg?raw=true")
 ```
 
-
-
-
-
+### [Master Planning](https://github.com/davidnfox/portfolio/blob/main/ScenarioA.jpg?raw=true)
+```{r}
+include_graphics("https://github.com/davidnfox/portfolio/blob/main/ScenarioA.jpg?raw=true")
+```
