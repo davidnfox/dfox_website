@@ -16,7 +16,7 @@ navbar:
         - text: "Vermont"
         - href: 
         - text: "Curiosities"
-        - href:
+        - href: portfolio_misc.html
     - text: "Blog"
       href: blog.html
     - text: "CV"

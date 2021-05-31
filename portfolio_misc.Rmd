@@ -1,0 +1,18 @@
+---
+title: "Curiosities"
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(echo = FALSE, layout = "l-body-outset")
+```
+
+### [Magazine spec map](https://github.com/davidnfox/portfolio/blob/main/bq.jpg?raw=true)
+```{r}
+knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/bq.jpg?raw=true")
+```
+
+### [Hand Work](https://github.com/davidnfox/portfolio/blob/main/lake_perez.jpg?raw=true)
+```{r}
+knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/lake_perez.jpg?raw=true")
+```
