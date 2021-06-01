@@ -12,9 +12,9 @@ knitr::opts_chunk$set(echo = FALSE, layout = "l-body-outset")
 knitr::include_graphics("images/bike_ped.png")
 ```
 
-### [Development Pipeline](https://github.com/davidnfox/portfolio/blob/main/5th_Avon_pipeline.png?raw=true)
+### [Development Pipeline](https://github.com/davidnfox/portfolio/blob/main/pipeline.jpg?raw=true)
 ```{r}
-knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/5th_Avon_pipeline.png?raw=true")
+knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/pipeline.jpg?raw=true")
 ```
 
 ### [Development pattern GIF](https://github.com/davidnfox/portfolio/blob/main/weekly_150.gif?raw=true)
