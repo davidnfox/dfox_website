@@ -16,3 +16,8 @@ knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/bq.jpg
 ```{r}
 knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/lake_perez.jpg?raw=true")
 ```
+
+### [Is this GIS?](https://github.com/davidnfox/portfolio/blob/main/big_small.jpg?raw=true)
+```{r}
+knitr::include_graphics("images/big_small.png")
+```
