@@ -17,8 +17,8 @@ create_proj_card(
   img_src = "images/pv.png",
   url = "https://maps.vcgi.vermont.gov/ParcelViewer/",
   title = "Vermont Parcel Viewer",
-  text = "Vermont’s land records are rooted firmly in in the 19th Century. With a population of less than 700,000 people, we have 255 municipalities that manage their own land records. Even Texas, with a population of over 29 million, only has 254 counties. Historically, there has been no consolidated public information available on property ownership. While most towns maintain some level of parcel tax maps, many of these are updated infrequently and often are based on paper maps. Prior to 2020, some towns had parcel maps that were from the 1990s.",
-  text2 = "On January 1, 2020 the State of Vemont completed a 3 year, $3 million project to map all of the parcels in Vermont. This data is linked to the annual state ‘grand list’ of property valuations and ownership. This data is made freely available, providing the first comprehensive picture of Vermont land ownership avaialble since the Beers Atlas’s were made in the 1880’s."
+  text = "Vermont’s land records are rooted firmly in in the 19th Century. With a population of less than 700,000 people, we have 251 municipalities that manage their own land records. Even Texas, with a population of over 29 million, only has 254 counties. Historically, there has been no consolidated public information available on property ownership. While most towns maintain some level of parcel tax maps, many of these are updated infrequently and often are based on paper maps. Prior to 2020, some towns had parcel maps that were from the 1990s.",
+  text2 = "On January 1, 2020 the State of Vemont completed a 3 year, $3 million project to map all of the parcels in Vermont. This data is linked to the annual state ‘grand list’ of property valuations and ownership. This data is made freely available, providing the first comprehensive picture of Vermont land ownership avaialble since the Beers Atlases were made in the 1880’s."
 )
 
 create_proj_card(
@@ -26,7 +26,7 @@ create_proj_card(
   url = "https://davidnfox.github.io/parcel_values/",
   title = "Vermont property values",
   text = "Parcel ownership by land use category and value.",
-  text2 = "Property valuation in Vermont is the complied initialy at the town level. Towns are supposed to reappraise propety at least every ten years, but this tends to get stretched out. The state annually adjusts property values to a common level of appraisal for calculation of schools funding. This map shows Vermont property values per acre adjusted to the common level of appraisal (height) and land uses categories (color). You can clearly see the eleveated value per acre of commercial - in red-  and residential properties - yellow - in village areas and along road cooridors. Ponds and waterfront property show islands of elevated value in rural areas - often in blue indicating seasonal or second home ownership. Ski resorts also show up as pockets of extreme values scattered across the state."
+  text2 = "Property valuation in Vermont is the complied initialy at the town level. Towns are supposed to reappraise propety at least every ten years, but this tends to get stretched out. The state annually adjusts property values to a common level of appraisal for calculation of schools funding. This map shows Vermont property values per acre adjusted to the common level of appraisal (height) and land uses categories (color). You can clearly see the elevated value per acre of commercial - in red-  and residential properties - yellow - in village areas and along road cooridors. Ponds and waterfront property show islands of elevated value in rural areas - often in blue indicating seasonal or second home ownership. Ski resorts also show up as pockets of extreme values scattered across the state."
 )
 
 create_proj_card(
