@@ -12,11 +12,11 @@ navbar:
     - text: "Portfolio"
       menu:
         - text: "Albemarle County"
-        - href: portfolio_albemarle.html
+          href: portfolio_albemarle.html
         - text: "Vermont"
-        - href: portfolio_VT.html
+          href: portfolio_VT.html
         - text: "Curiosities"
-        - href: portfolio_misc.html
+          href: portfolio_misc.html
     - text: "Blog"
       href: blog.html
     - text: "CV"
