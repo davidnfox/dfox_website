@@ -1,0 +1,38 @@
+---
+title: "VERMONT"
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(echo = FALSE, layout = "l-body-outset")
+```
+
+### [Buildings](https://github.com/davidnfox/portfolio/blob/main/hexes.png?raw=true)
+```{r}
+knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/hexes.png?raw=true")
+```
+
+### [Local Land Use](https://github.com/davidnfox/portfolio/blob/main/landuse.jpg?raw=true)
+```{r}
+knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/landuse.jpg?raw=true")
+```
+
+### [Land Slide](https://github.com/davidnfox/portfolio/blob/main/landslide.jpg?raw=true)
+```{r}
+knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/landslide.jpg?raw=true")
+```
+
+### [Parcels](https://github.com/davidnfox/portfolio/blob/main/parcel.png?raw=true)
+```{r}
+knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/parcels.png?raw=true")
+```
+
+### [Dasymetric Population](https://github.com/davidnfox/portfolio/blob/main/population.png?raw=true)
+```{r}
+knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/population.png?raw=true")
+```
+
+### [Watershed](https://github.com/davidnfox/portfolio/blob/main/water.jpg?raw=true)
+```{r}
+knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/water.jpg?raw=true")
+```
