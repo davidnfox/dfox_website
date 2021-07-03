@@ -2169,7 +2169,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   /* These properties only apply to Distill sites and blogs  */
 
   .distill-site-header {
-    --title-size:       25px;
+    --title-size:       18px;
     --text-color:       rgba(255, 255, 255, 0.8);
     --text-size:        15px;
     --hover-color:      white;
@@ -2186,9 +2186,24 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   /*-- Additional custom styles --*/
   /* Add any additional CSS rules below                      */
 
-  .distill-site-header { 
-    letter-spacing: 2px;
-    text-transform: uppercase;
+  /* To fix dropdown color*/
+  .nav-dropdown .nav-dropbtn {
+      border: none;
+      outline: none;
+      color: #343d52;
+      padding: 16px 10px;
+      background-color: transparent;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      margin: 0;
+          margin-top: 0px;
+      margin-top: 1px;
+      z-index: 2;
+  }
+
+  .nav-dropdown .nav-dropbtn:hover {
+    color:  #485063;
   }</style>
   <style type="text/css">
   /* base style */
@@ -2386,12 +2401,9 @@ Portfolio
 <span class="down-arrow">&#x25BE;</span>
 </button>
 <div class="nav-dropdown-content">
-<span class="nav-dropdown-header">Albemarle County</span>
-<a href="portfolio_albemarle.html"></a>
-<span class="nav-dropdown-header">Vermont</span>
-<a href="portfolio_VT.html"></a>
-<span class="nav-dropdown-header">Curiosities</span>
-<a href="portfolio_misc.html"></a>
+<a href="portfolio_albemarle.html">Albemarle County</a>
+<a href="portfolio_VT.html">Vermont</a>
+<a href="portfolio_misc.html">Curiosities</a>
 </div>
 </div>
 <a href="blog.html">Blog</a>
@@ -2415,7 +2427,7 @@ Portfolio
 <div class="d-article">
 <div class="layout-chunk" data-layout="l-body">
 <div class="card">
-<img class="card-img-top" src="images/pv.png" style="width:400px;"/>
+<img class="card-img-top" src="images/pv.png" style="width:300px;"/>
 <div class="card-body">
 <h4>
 <a href="https://maps.vcgi.vermont.gov/ParcelViewer/">Vermont Parcel Viewer</a>
@@ -2428,7 +2440,7 @@ On January 1, 2020 the State of Vemont completed a 3 year, $3 million project to
 </div>
 </div>
 <div class="card">
-<img class="card-img-top" src="images/values.png" style="width:400px;"/>
+<img class="card-img-top" src="images/values.png" style="width:300px;"/>
 <div class="card-body">
 <h4>
 <a href="https://davidnfox.github.io/parcel_values/">Vermont property values</a>
@@ -2441,7 +2453,7 @@ Property valuation in Vermont is the complied initialy at the town level. Towns 
 </div>
 </div>
 <div class="card">
-<img class="card-img-top" src="images/flexb.jpg" style="width:400px;"/>
+<img class="card-img-top" src="images/flexb.jpg" style="width:300px;"/>
 <div class="card-body">
 <h4>
 <a href="https://davidnfox.github.io/dashboard_example/truncated_dashboard.html#overall-progress">Project management flexboard</a>
@@ -2454,7 +2466,7 @@ This is an example of an interactive project management dashboard built in R to 
 </div>
 </div>
 <div class="card">
-<img class="card-img-top" src="images/leg_pop.png" style="width:400px;"/>
+<img class="card-img-top" src="images/leg_pop.png" style="width:300px;"/>
 <div class="card-body">
 <h4>
 <a href="https://davidnfox.github.io/legislative_population_report/">Legeslative Population Report</a>

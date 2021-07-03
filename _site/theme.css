@@ -76,3 +76,23 @@ d-appendix {
 
 /*-- Additional custom styles --*/
 /* Add any additional CSS rules below                      */
+
+/* To fix dropdown color*/
+.nav-dropdown .nav-dropbtn {
+    border: none;
+    outline: none;
+    color: #343d52;
+    padding: 16px 10px;
+    background-color: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    margin: 0;
+        margin-top: 0px;
+    margin-top: 1px;
+    z-index: 2;
+}
+
+.nav-dropdown .nav-dropbtn:hover {
+  color:  #485063;
+}
