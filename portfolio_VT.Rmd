@@ -22,7 +22,7 @@ knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/landus
 knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/landslide.jpg?raw=true")
 ```
 
-### [Parcels](https://github.com/davidnfox/portfolio/blob/main/parcel.png?raw=true)
+### [Parcels](https://github.com/davidnfox/portfolio/blob/main/parcels.png?raw=true)
 ```{r}
 knitr::include_graphics("https://github.com/davidnfox/portfolio/blob/main/parcels.png?raw=true")
 ```
