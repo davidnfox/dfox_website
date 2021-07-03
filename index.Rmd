@@ -5,9 +5,9 @@ links:
   - label: '`r fontawesome::fa("twitter", height = "25px")`'
     url: "https://twitter.com/ReynardSubtil"
   - label: '`r fontawesome::fa("github", height = "25px")`'
-    url: "https://github.com"
+    url: "https://github.com/davidnfox"
   - label: '`r fontawesome::fa("envelope", height = "25px")`'
-    url: "mailto:fox.david.nn@gmail.com"
+    url: "mailto:fox.david.n@gmail.com"
 output:
   postcards::trestles
 site: distill::distill_website
